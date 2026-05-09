@@ -42,8 +42,31 @@
     .au-nav{background:var(--noir);border-bottom:2px solid var(--gold)}
 
     /* Hero */
-    .hero{background:var(--noir);position:relative;overflow:hidden}
-    .hero::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(45deg,transparent,transparent 60px,rgba(201,168,124,.03) 60px,rgba(201,168,124,.03) 120px)}
+    .hero{background:var(--noir);position:relative;overflow:hidden;min-height:88vh;display:flex;align-items:center}
+    .hero::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(45deg,transparent,transparent 60px,rgba(201,168,124,.025) 60px,rgba(201,168,124,.025) 120px);pointer-events:none}
+    .hero-glow{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:600px;height:600px;background:radial-gradient(circle,rgba(201,168,124,.10) 0%,transparent 70%);pointer-events:none}
+    .hero-kicker{font-size:.65rem;letter-spacing:.4em;text-transform:uppercase;color:var(--gold);opacity:.7;font-weight:600}
+    .hero-rule{width:40px;height:1px;background:var(--gold);opacity:.5;margin:0 auto}
+    .hero-marca{width:min(200px,50vw);filter:drop-shadow(0 0 40px rgba(201,168,124,.35));transition:filter .3s}
+    .hero-marca:hover{filter:drop-shadow(0 0 60px rgba(201,168,124,.55))}
+    .hero-monogram{width:min(60px,12vw);border-radius:6px;opacity:.85}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+    .hero-content>*{animation:fadeUp .8s ease both}
+    .hero-content>*:nth-child(1){animation-delay:.05s}
+    .hero-content>*:nth-child(2){animation-delay:.15s}
+    .hero-content>*:nth-child(3){animation-delay:.25s}
+    .hero-content>*:nth-child(4){animation-delay:.35s}
+    .hero-content>*:nth-child(5){animation-delay:.45s}
+    .hero-content>*:nth-child(6){animation-delay:.55s}
+    .hero-scroll{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:.4rem;opacity:.35;cursor:pointer;transition:opacity .2s}
+    .hero-scroll:hover{opacity:.65}
+    .hero-scroll-line{width:1px;height:40px;background:var(--gold);animation:scrollLine 2s ease-in-out infinite}
+    @keyframes scrollLine{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform:scaleY(1);transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+
+    /* Branch cards */
+    .branch-card{background:white;border-radius:1.25rem;border:1px solid rgba(201,168,124,.2);padding:1.75rem;transition:transform .2s,box-shadow .2s}
+    .branch-card:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(28,26,26,.12)}
+    .branch-flag{font-size:2.2rem;line-height:1}
 
     /* Value Props bar */
     .vp-icon{width:42px;height:42px;border-radius:50%;background:rgba(201,168,124,.12);color:var(--gold);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1rem}
@@ -831,20 +854,60 @@
 </nav>
 
 <!-- ═══════ HERO ═══════ -->
-<section class="hero py-20 px-4">
-  <div class="max-w-3xl mx-auto text-center flex flex-col items-center gap-6">
-    <img src="Marca.jpg" alt="AUREO" style="max-width:280px;width:100%;border-radius:8px;filter:drop-shadow(0 0 32px rgba(201,168,124,.4))">
-    <h1 class="font-aureo text-4xl md:text-5xl font-bold" style="color:var(--gold);line-height:1.15">Alta Moda Italiana</h1>
-    <p class="text-sm md:text-base" style="color:rgba(201,168,124,.65);letter-spacing:.04em">
-      Algodón Pima · Supima Orgánico · Lino Europeo · Confeccionado en Italia
-    </p>
-    <button id="heroCta"
-      class="font-semibold px-8 py-3 rounded-full transition"
-      style="border:2px solid var(--gold);color:var(--gold);background:transparent;cursor:pointer;font-size:.95rem;letter-spacing:.05em"
-      onmouseover="this.style.background='var(--gold)';this.style.color='var(--noir)'"
-      onmouseout="this.style.background='transparent';this.style.color='var(--gold)'">
-      <span data-es="Ver Colección" data-en="View Collection">Ver Colección</span>
-    </button>
+<section class="hero px-4">
+  <div class="hero-glow"></div>
+  <div class="max-w-4xl mx-auto w-full py-20">
+    <div class="hero-content flex flex-col items-center text-center gap-5">
+
+      <!-- Kicker -->
+      <p class="hero-kicker">Colección 2026 · Milano</p>
+
+      <!-- Gold rule -->
+      <div class="hero-rule"></div>
+
+      <!-- Wordmark -->
+      <img src="Marca.jpg" alt="AUREO" class="hero-marca">
+
+      <!-- Tagline -->
+      <div style="display:flex;flex-direction:column;align-items:center;gap:.6rem">
+        <h1 class="font-aureo" style="font-size:clamp(1.6rem,4vw,2.6rem);font-weight:700;color:var(--gold);letter-spacing:.04em;line-height:1.1">
+          Alta Moda Italiana
+        </h1>
+        <p style="font-size:.78rem;color:rgba(201,168,124,.55);letter-spacing:.18em;text-transform:uppercase">
+          Algodón Pima &nbsp;·&nbsp; Supima Orgánico &nbsp;·&nbsp; Lino Europeo
+        </p>
+      </div>
+
+      <!-- Quote -->
+      <p class="font-aureo" style="font-style:italic;font-size:clamp(.85rem,2vw,1rem);color:rgba(201,168,124,.45);letter-spacing:.02em">
+        "Non seguiamo la moda. Creiamo i classici."
+      </p>
+
+      <!-- CTA -->
+      <div style="display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;margin-top:.5rem">
+        <button id="heroCta"
+          class="font-semibold px-8 py-3 rounded-full transition"
+          style="border:1.5px solid var(--gold);color:var(--gold);background:transparent;cursor:pointer;font-size:.88rem;letter-spacing:.08em;text-transform:uppercase"
+          onmouseover="this.style.background='var(--gold)';this.style.color='var(--noir)'"
+          onmouseout="this.style.background='transparent';this.style.color='var(--gold)'">
+          <span data-es="Ver Colección" data-en="View Collection">Ver Colección</span>
+        </button>
+        <button onclick="document.getElementById('sedes').scrollIntoView({behavior:'smooth'})"
+          class="font-semibold px-8 py-3 rounded-full transition"
+          style="border:1.5px solid rgba(201,168,124,.3);color:rgba(201,168,124,.6);background:transparent;cursor:pointer;font-size:.88rem;letter-spacing:.08em;text-transform:uppercase"
+          onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'"
+          onmouseout="this.style.borderColor='rgba(201,168,124,.3)';this.style.color='rgba(201,168,124,.6)'">
+          <span data-es="Nuestras Sedes" data-en="Our Locations">Nuestras Sedes</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Scroll indicator -->
+  <div class="hero-scroll" onclick="document.getElementById('catalog').scrollIntoView({behavior:'smooth'})">
+    <div class="hero-scroll-line"></div>
+    <i class="fa-solid fa-chevron-down" style="color:var(--gold);font-size:.6rem"></i>
   </div>
 </section>
 
@@ -993,27 +1056,174 @@
   </div>
 </section>
 
-<!-- ═══════ FOOTER ═══════ -->
-<footer style="background:var(--noir);color:rgba(201,168,124,.7);padding:3rem 1rem 2rem">
+<!-- ═══════ SEDES ═══════ -->
+<section id="sedes" style="background:var(--noir);padding:5rem 1rem">
   <div class="max-w-5xl mx-auto">
-    <div class="flex flex-col md:flex-row items-center justify-between gap-6 pb-6" style="border-bottom:1px solid rgba(201,168,124,.2)">
-      <div class="flex items-center gap-3">
-        <img src="logo.jpg" alt="AUREO" style="height:40px;width:auto;border-radius:4px">
-        <span class="font-aureo text-2xl font-bold" style="color:var(--gold)">AUREO</span>
+    <div class="text-center mb-12">
+      <p style="font-size:.65rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);opacity:.7;font-weight:600;margin-bottom:.75rem">Presencia Global</p>
+      <div style="width:32px;height:1px;background:var(--gold);opacity:.4;margin:0 auto .75rem"></div>
+      <h2 class="font-aureo" style="font-size:clamp(1.8rem,4vw,2.6rem);font-weight:700;color:var(--gold);line-height:1.1" data-es="Nuestras Sedes" data-en="Our Locations">Nuestras Sedes</h2>
+      <p style="margin-top:.75rem;font-size:.85rem;color:rgba(201,168,124,.45);letter-spacing:.05em" data-es="Tres ciudades · Una sola visión de excelencia" data-en="Three cities · One vision of excellence">Tres ciudades · Una sola visión de excelencia</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+      <!-- Milano - Casa Madre -->
+      <div class="branch-card relative">
+        <div style="position:absolute;top:1rem;right:1rem;font-size:.6rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;background:var(--gold);color:var(--noir);padding:.2rem .55rem;border-radius:3px">Casa Madre</div>
+        <div class="branch-flag mb-3">🇮🇹</div>
+        <h3 class="font-aureo font-bold text-lg mb-1" style="color:var(--text-dark)">Milano</h3>
+        <p style="font-size:.7rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:.75rem">Italia</p>
+        <div style="display:flex;flex-direction:column;gap:.5rem">
+          <div style="display:flex;gap:.6rem;align-items:flex-start">
+            <i class="fa-solid fa-location-dot" style="color:var(--gold);font-size:.8rem;margin-top:.15rem;flex-shrink:0"></i>
+            <p style="font-size:.82rem;color:var(--text-mid);line-height:1.5">Via della Spiga 12<br>20121 Milano, Italia</p>
+          </div>
+          <div style="display:flex;gap:.6rem;align-items:center">
+            <i class="fa-solid fa-phone" style="color:var(--gold);font-size:.8rem;flex-shrink:0"></i>
+            <p style="font-size:.82rem;color:var(--text-mid)">+39 02 8736 4500</p>
+          </div>
+          <div style="display:flex;gap:.6rem;align-items:center">
+            <i class="fa-solid fa-envelope" style="color:var(--gold);font-size:.8rem;flex-shrink:0"></i>
+            <p style="font-size:.82rem;color:var(--text-mid)">milano@aureo.it</p>
+          </div>
+          <div style="display:flex;gap:.6rem;align-items:center">
+            <i class="fa-solid fa-clock" style="color:var(--gold);font-size:.8rem;flex-shrink:0"></i>
+            <p style="font-size:.78rem;color:var(--text-mid)" data-es="Lun–Sáb 10h–20h · Dom 11h–18h" data-en="Mon–Sat 10am–8pm · Sun 11am–6pm">Lun–Sáb 10h–20h · Dom 11h–18h</p>
+          </div>
+        </div>
       </div>
-      <div class="text-center text-sm">
-        <p style="color:rgba(201,168,124,.8)">Via della Spiga 12, 20121 Milano</p>
-        <p style="color:rgba(201,168,124,.5)">trade@aureo.it</p>
+
+      <!-- Lima -->
+      <div class="branch-card">
+        <div class="branch-flag mb-3">🇵🇪</div>
+        <h3 class="font-aureo font-bold text-lg mb-1" style="color:var(--text-dark)">Lima</h3>
+        <p style="font-size:.7rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:.75rem">Perú</p>
+        <div style="display:flex;flex-direction:column;gap:.5rem">
+          <div style="display:flex;gap:.6rem;align-items:flex-start">
+            <i class="fa-solid fa-location-dot" style="color:var(--gold);font-size:.8rem;margin-top:.15rem;flex-shrink:0"></i>
+            <p style="font-size:.82rem;color:var(--text-mid);line-height:1.5">Av. Larco 1301, Miraflores<br>Lima 15074, Perú</p>
+          </div>
+          <div style="display:flex;gap:.6rem;align-items:center">
+            <i class="fa-solid fa-phone" style="color:var(--gold);font-size:.8rem;flex-shrink:0"></i>
+            <p style="font-size:.82rem;color:var(--text-mid)">+51 1 445 6200</p>
+          </div>
+          <div style="display:flex;gap:.6rem;align-items:center">
+            <i class="fa-solid fa-envelope" style="color:var(--gold);font-size:.8rem;flex-shrink:0"></i>
+            <p style="font-size:.82rem;color:var(--text-mid)">lima@aureo.it</p>
+          </div>
+          <div style="display:flex;gap:.6rem;align-items:center">
+            <i class="fa-solid fa-clock" style="color:var(--gold);font-size:.8rem;flex-shrink:0"></i>
+            <p style="font-size:.78rem;color:var(--text-mid)" data-es="Lun–Sáb 10h–20h · Dom 11h–18h" data-en="Mon–Sat 10am–8pm · Sun 11am–6pm">Lun–Sáb 10h–20h · Dom 11h–18h</p>
+          </div>
+        </div>
       </div>
-      <div class="flex items-center gap-4">
-        <a href="https://instagram.com/aureoitalia" target="_blank" rel="noopener" style="color:var(--gold);text-decoration:none;font-size:.85rem">
-          <i class="fa-brands fa-instagram" style="font-size:1.2rem"></i> @aureoitalia
+
+      <!-- Bogotá -->
+      <div class="branch-card">
+        <div class="branch-flag mb-3">🇨🇴</div>
+        <h3 class="font-aureo font-bold text-lg mb-1" style="color:var(--text-dark)">Bogotá</h3>
+        <p style="font-size:.7rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:.75rem">Colombia</p>
+        <div style="display:flex;flex-direction:column;gap:.5rem">
+          <div style="display:flex;gap:.6rem;align-items:flex-start">
+            <i class="fa-solid fa-location-dot" style="color:var(--gold);font-size:.8rem;margin-top:.15rem;flex-shrink:0"></i>
+            <p style="font-size:.82rem;color:var(--text-mid);line-height:1.5">Calle 82 # 11-37, Zona Rosa<br>Bogotá D.C., Colombia</p>
+          </div>
+          <div style="display:flex;gap:.6rem;align-items:center">
+            <i class="fa-solid fa-phone" style="color:var(--gold);font-size:.8rem;flex-shrink:0"></i>
+            <p style="font-size:.82rem;color:var(--text-mid)">+57 1 321 9800</p>
+          </div>
+          <div style="display:flex;gap:.6rem;align-items:center">
+            <i class="fa-solid fa-envelope" style="color:var(--gold);font-size:.8rem;flex-shrink:0"></i>
+            <p style="font-size:.82rem;color:var(--text-mid)">bogota@aureo.it</p>
+          </div>
+          <div style="display:flex;gap:.6rem;align-items:center">
+            <i class="fa-solid fa-clock" style="color:var(--gold);font-size:.8rem;flex-shrink:0"></i>
+            <p style="font-size:.78rem;color:var(--text-mid)" data-es="Lun–Sáb 10h–20h · Dom 11h–18h" data-en="Mon–Sat 10am–8pm · Sun 11am–6pm">Lun–Sáb 10h–20h · Dom 11h–18h</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Mapa decorativo / frase -->
+    <div style="text-align:center;margin-top:3rem;padding-top:2rem;border-top:1px solid rgba(201,168,124,.15)">
+      <p class="font-aureo" style="font-style:italic;font-size:1rem;color:rgba(201,168,124,.35)">
+        "Dove la qualità non ha confini."
+      </p>
+      <p style="font-size:.7rem;color:rgba(201,168,124,.25);margin-top:.3rem;letter-spacing:.12em;text-transform:uppercase">Milano · Lima · Bogotá</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ FOOTER ═══════ -->
+<footer style="background:#111010;color:rgba(201,168,124,.6);padding:3.5rem 1rem 2rem">
+  <div class="max-w-6xl mx-auto">
+    <!-- Top row -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-8 pb-8" style="border-bottom:1px solid rgba(201,168,124,.12)">
+
+      <!-- Brand -->
+      <div class="flex flex-col gap-3">
+        <div class="flex items-center gap-2.5">
+          <img src="logo.jpg" alt="AUREO" style="height:38px;width:auto;border-radius:4px">
+          <span class="font-aureo text-xl font-bold" style="color:var(--gold)">AUREO</span>
+        </div>
+        <p style="font-size:.78rem;color:rgba(201,168,124,.45);line-height:1.6" data-es="Alta Moda Italiana · Confeccionado en Milán desde 2024." data-en="Italian High Fashion · Crafted in Milan since 2024.">Alta Moda Italiana · Confeccionado en Milán desde 2024.</p>
+        <a href="https://instagram.com/aureoitalia" target="_blank" rel="noopener" style="color:var(--gold);text-decoration:none;font-size:.82rem;display:flex;align-items:center;gap:.4rem;width:fit-content">
+          <i class="fa-brands fa-instagram"></i> @aureoitalia
         </a>
       </div>
+
+      <!-- Colección -->
+      <div>
+        <p style="font-size:.65rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:.9rem" data-es="Colección" data-en="Collection">Colección</p>
+        <div style="display:flex;flex-direction:column;gap:.5rem">
+          <button onclick="filterProducts('polo');document.getElementById('catalog').scrollIntoView({behavior:'smooth'})" style="background:none;border:none;cursor:pointer;font-size:.82rem;color:rgba(201,168,124,.55);text-align:left;padding:0;transition:color .15s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='rgba(201,168,124,.55)'" data-es="Polos" data-en="Polos">Polos</button>
+          <button onclick="filterProducts('tshirt');document.getElementById('catalog').scrollIntoView({behavior:'smooth'})" style="background:none;border:none;cursor:pointer;font-size:.82rem;color:rgba(201,168,124,.55);text-align:left;padding:0;transition:color .15s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='rgba(201,168,124,.55)'">T-Shirts</button>
+          <button onclick="filterProducts('longsleeve');document.getElementById('catalog').scrollIntoView({behavior:'smooth'})" style="background:none;border:none;cursor:pointer;font-size:.82rem;color:rgba(201,168,124,.55);text-align:left;padding:0;transition:color .15s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='rgba(201,168,124,.55)'" data-es="Manga Larga" data-en="Long Sleeve">Manga Larga</button>
+          <button onclick="filterProducts('camisa');document.getElementById('catalog').scrollIntoView({behavior:'smooth'})" style="background:none;border:none;cursor:pointer;font-size:.82rem;color:rgba(201,168,124,.55);text-align:left;padding:0;transition:color .15s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='rgba(201,168,124,.55)'" data-es="Camisas" data-en="Dress Shirts">Camisas</button>
+        </div>
+      </div>
+
+      <!-- Sedes -->
+      <div>
+        <p style="font-size:.65rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:.9rem" data-es="Sedes" data-en="Locations">Sedes</p>
+        <div style="display:flex;flex-direction:column;gap:.7rem">
+          <div>
+            <p style="font-size:.82rem;color:rgba(201,168,124,.75);font-weight:600">🇮🇹 Milano</p>
+            <p style="font-size:.75rem;color:rgba(201,168,124,.4)">Via della Spiga 12</p>
+          </div>
+          <div>
+            <p style="font-size:.82rem;color:rgba(201,168,124,.75);font-weight:600">🇵🇪 Lima</p>
+            <p style="font-size:.75rem;color:rgba(201,168,124,.4)">Av. Larco 1301, Miraflores</p>
+          </div>
+          <div>
+            <p style="font-size:.82rem;color:rgba(201,168,124,.75);font-weight:600">🇨🇴 Bogotá</p>
+            <p style="font-size:.75rem;color:rgba(201,168,124,.4)">Calle 82 # 11-37, Zona Rosa</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contacto -->
+      <div>
+        <p style="font-size:.65rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:.9rem" data-es="Contacto" data-en="Contact">Contacto</p>
+        <div style="display:flex;flex-direction:column;gap:.55rem">
+          <a href="mailto:trade@aureo.it" style="font-size:.82rem;color:rgba(201,168,124,.55);text-decoration:none;display:flex;align-items:center;gap:.5rem" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='rgba(201,168,124,.55)'">
+            <i class="fa-solid fa-envelope" style="font-size:.8rem"></i> trade@aureo.it
+          </a>
+          <a href="https://wa.me/390212345678" target="_blank" rel="noopener" style="font-size:.82rem;color:rgba(201,168,124,.55);text-decoration:none;display:flex;align-items:center;gap:.5rem" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='rgba(201,168,124,.55)'">
+            <i class="fa-brands fa-whatsapp" style="font-size:.9rem"></i> WhatsApp
+          </a>
+          <p style="font-size:.78rem;color:rgba(201,168,124,.35)" data-es="Atención al cliente: Lun–Vie 9h–18h" data-en="Customer service: Mon–Fri 9am–6pm">Atención al cliente: Lun–Vie 9h–18h</p>
+        </div>
+      </div>
+
     </div>
-    <div class="flex flex-col md:flex-row items-center justify-between gap-3 pt-5 text-xs" style="color:rgba(201,168,124,.4)">
+
+    <!-- Bottom row -->
+    <div class="flex flex-col md:flex-row items-center justify-between gap-3 pt-5 text-xs" style="color:rgba(201,168,124,.3)">
       <p>© 2026 AUREO S.r.l. — Alta Moda Italiana. Tutti i diritti riservati.</p>
-      <p data-es="Hecho con dedicación en Milano, Italia" data-en="Crafted with dedication in Milan, Italy">Hecho con dedicación en Milano, Italia</p>
+      <p class="font-aureo" style="font-style:italic;color:rgba(201,168,124,.25)">Milano · Lima · Bogotá</p>
     </div>
   </div>
 </footer>
