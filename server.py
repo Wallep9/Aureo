@@ -73,7 +73,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
             self._serve_file(HTML_FILE, "text/html; charset=utf-8")
         elif path == "/catalog.json":
             self._serve_file(BASE_DIR / "catalog.json", "application/json")
-        elif path in ('/logo.jpg', '/Marca.jpg', '/favicon.ico'):
+        elif path in ('/logo.jpg', '/Marca.jpg', '/Aureo-logo.png', '/favicon.ico'):
             filename = path.lstrip('/')
             ext = Path(filename).suffix.lower()
             self._serve_file(BASE_DIR / filename, MIME.get(ext, 'application/octet-stream'))

@@ -7,8 +7,8 @@
   <meta name="description" content="Alta moda italiana. Polos, T-Shirts, Manga Larga y Camisas en Algodón Pima, Supima Orgánico y Lino Europeo. Confeccionado en Milán.">
   <meta name="keywords" content="moda italiana, polos, camisas, algodón pima, supima, lino europeo, aureo, milano">
   <meta name="theme-color" content="#1C1A1A">
-  <link rel="icon" type="image/jpeg" href="/logo.jpg">
-  <link rel="apple-touch-icon" href="/logo.jpg">
+  <link rel="icon" type="image/png" href="/Aureo-logo.png">
+  <link rel="apple-touch-icon" href="/Aureo-logo.png">
   <meta property="og:type" content="website">
   <meta property="og:title" content="AUREO — Alta Moda Italiana · Colección 2026">
   <meta property="og:description" content="Polos, T-Shirts y Camisas · Algodón Pima · Supima Orgánico · Confeccionado en Milano">
@@ -82,19 +82,49 @@
     /* Monogram — JPG with screen blend to remove black background */
     .hero-monogram-wrap{
       position:relative;display:inline-flex;align-items:center;justify-content:center;
-      width:min(140px,26vw);height:min(140px,26vw);
-      opacity:0;animation:heroFade 1.2s .15s ease forwards;
+      width:min(210px,38vw);
+      opacity:0;animation:logoReveal 1.4s .05s cubic-bezier(.16,1,.3,1) forwards;
     }
+    /* Outer diffuse gold halo */
     .hero-monogram-wrap::before{
-      content:'';position:absolute;inset:-30px;
-      background:radial-gradient(circle,rgba(201,168,124,.35) 0%,transparent 60%);
-      filter:blur(8px);
+      content:'';position:absolute;inset:-50px;
+      background:radial-gradient(circle,rgba(201,168,124,.55) 0%,rgba(168,137,94,.28) 40%,transparent 70%);
+      filter:blur(22px);
+      animation:haloGlow 3s 1.4s ease-in-out infinite alternate;
+    }
+    /* Inner tight ring */
+    .hero-monogram-wrap::after{
+      content:'';position:absolute;inset:-4px;
+      border-radius:50%;
+      box-shadow:
+        0 0 18px 6px rgba(201,168,124,.45),
+        0 0 55px 18px rgba(201,168,124,.18),
+        0 0 100px 35px rgba(201,168,124,.08);
+      animation:ringPulse 2.8s 1.4s ease-in-out infinite alternate;
     }
     .hero-monogram{
-      width:100%;height:100%;object-fit:contain;
-      mix-blend-mode:screen;       /* removes JPG black background */
-      filter:drop-shadow(0 0 25px rgba(201,168,124,.5)) brightness(1.15) contrast(1.1);
+      width:100%;height:auto;object-fit:contain;
+      mix-blend-mode:screen;
+      filter:
+        drop-shadow(0 0 18px rgba(240,220,160,.75))
+        drop-shadow(0 0 45px rgba(201,168,124,.55))
+        drop-shadow(0 0 90px rgba(168,137,94,.35))
+        brightness(1.22) contrast(1.08) saturate(1.15);
       position:relative;z-index:1;
+    }
+    @keyframes logoReveal{
+      0%  {opacity:0;transform:scale(.55) translateY(30px);filter:blur(18px);}
+      50% {opacity:.9;transform:scale(1.06) translateY(-6px);filter:blur(0px);}
+      75% {transform:scale(.985) translateY(2px);}
+      100%{opacity:1;transform:scale(1) translateY(0);}
+    }
+    @keyframes haloGlow{
+      0%  {opacity:.7;transform:scale(1);}
+      100%{opacity:1;transform:scale(1.12);}
+    }
+    @keyframes ringPulse{
+      0%  {opacity:.6;}
+      100%{opacity:1;}
     }
 
     /* ═════ AUREO MASSIVE WORDMARK — cinematic luxury reveal ═════ */
@@ -1092,7 +1122,7 @@
   <div class="max-w-7xl mx-auto px-4 flex items-center justify-between h-16 gap-4">
     <!-- Logo -->
     <a href="#" class="flex items-center gap-2.5 flex-shrink-0 no-underline">
-      <img src="logo.jpg" style="height:36px;width:auto;border-radius:4px" alt="AUREO logo">
+      <img src="Aureo-logo.png" style="height:36px;width:auto;border-radius:4px" alt="AUREO logo">
       <span class="font-aureo text-xl font-bold" style="color:var(--gold);letter-spacing:.08em">AUREO</span>
     </a>
 
@@ -1151,9 +1181,9 @@
 
   <div style="display:flex;flex-direction:column;align-items:center;text-align:center;gap:1.7rem;padding:5rem 1.5rem 4rem;position:relative;z-index:2;width:100%;max-width:1000px">
 
-    <!-- Monogram A — JPG with screen blend to remove black background -->
+    <!-- Logo principal AUREO — PNG con screen blend -->
     <div class="hero-monogram-wrap">
-      <img src="logo.jpg" alt="AUREO Monogram" class="hero-monogram">
+      <img src="Aureo-logo.png" alt="AUREO Logo" class="hero-monogram">
     </div>
 
     <!-- Massive AUREO wordmark — cinematic luxury reveal -->
@@ -1458,7 +1488,7 @@
       <!-- Brand -->
       <div class="flex flex-col gap-3">
         <div class="flex items-center gap-2.5">
-          <img src="logo.jpg" alt="AUREO" style="height:38px;width:auto;border-radius:4px">
+          <img src="Aureo-logo.png" alt="AUREO" style="height:38px;width:auto;border-radius:4px">
           <span class="font-aureo text-xl font-bold" style="color:var(--gold)">AUREO</span>
         </div>
         <p style="font-size:.78rem;color:rgba(201,168,124,.45);line-height:1.6" data-es="Alta Moda Italiana · Confeccionado en Milán desde 2024." data-en="Italian High Fashion · Crafted in Milan since 2024.">Alta Moda Italiana · Confeccionado en Milán desde 2024.</p>
