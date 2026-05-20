@@ -1108,7 +1108,7 @@
   /* ══════════════════════════════════════════════════════════════
      Product Rendering
   ══════════════════════════════════════════════════════════════ */
-  let activeFilter = 'all';
+  let activeFilter = 'camisa';
 
   function renderProducts(products) {
     const grid = document.getElementById('productGrid');
@@ -1155,7 +1155,7 @@
           </div>
           <p class="text-base font-bold mt-auto" style="color:var(--text-dark)" data-usd="${p.precio_usd}">${formatPrice(p.precio_usd, currentLang)}</p>
           <div class="flex flex-wrap gap-1">${sizesHtml}</div>
-          <div class="flex gap-2">
+          <div class="flex flex-col gap-2 sm:flex-row">
             <button class="btn-cart" style="flex:1" onmousedown="event.stopPropagation()" onclick="event.stopPropagation();addToCart(${p.id})">
               <i class="fa-solid fa-cart-plus"></i>
               <span data-es="Agregar" data-en="Add">Agregar</span>
@@ -1694,11 +1694,11 @@
 
     <!-- Category tabs -->
     <div class="flex items-center gap-2 overflow-x-auto pb-2 mb-8 scrollbar-hide justify-center flex-wrap">
-      <button class="cat-tab active" data-cat="all" onclick="filterProducts('all')" data-es="Todo" data-en="All">Todo</button>
+      <button class="cat-tab" data-cat="all" onclick="filterProducts('all')" data-es="Todo" data-en="All">Todo</button>
+      <button class="cat-tab active" data-cat="camisa" onclick="filterProducts('camisa')" data-es="Camisas" data-en="Dress Shirts">Camisas</button>
       <button class="cat-tab" data-cat="polo" onclick="filterProducts('polo')" data-es="Polos" data-en="Polos">Polos</button>
       <button class="cat-tab" data-cat="tshirt" onclick="filterProducts('tshirt')" data-es="T-Shirts" data-en="T-Shirts">T-Shirts</button>
       <button class="cat-tab" data-cat="longsleeve" onclick="filterProducts('longsleeve')" data-es="Manga Larga" data-en="Long Sleeve">Manga Larga</button>
-      <button class="cat-tab" data-cat="camisa" onclick="filterProducts('camisa')" data-es="Camisas" data-en="Dress Shirts">Camisas</button>
     </div>
 
     <!-- Grid -->
