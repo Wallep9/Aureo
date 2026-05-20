@@ -32,7 +32,7 @@
       "referencia": "AU-P001",
       "nombre": "Polo Venezia",
       "color": "Azul Naval",
-      "precio_usd": 42,
+      "precio_usd": 210,
       "categoria": "polo",
       "tallas": [
         "S",
@@ -65,7 +65,7 @@
       "referencia": "AU-P002",
       "nombre": "Polo Venezia",
       "color": "Marfil",
-      "precio_usd": 42,
+      "precio_usd": 210,
       "categoria": "polo",
       "tallas": [
         "S",
@@ -98,7 +98,7 @@
       "referencia": "AU-P003",
       "nombre": "Polo Roma",
       "color": "Borgoña",
-      "precio_usd": 42,
+      "precio_usd": 210,
       "categoria": "polo",
       "tallas": [
         "S",
@@ -131,7 +131,7 @@
       "referencia": "AU-P004",
       "nombre": "Polo Roma",
       "color": "Verde Botella",
-      "precio_usd": 42,
+      "precio_usd": 210,
       "categoria": "polo",
       "tallas": [
         "S",
@@ -164,7 +164,7 @@
       "referencia": "AU-P005",
       "nombre": "Polo Firenze",
       "color": "Azul Cobalto",
-      "precio_usd": 42,
+      "precio_usd": 210,
       "categoria": "polo",
       "tallas": [
         "S",
@@ -197,7 +197,7 @@
       "referencia": "AU-P006",
       "nombre": "Polo Firenze",
       "color": "Gris Antracita",
-      "precio_usd": 42,
+      "precio_usd": 210,
       "categoria": "polo",
       "tallas": [
         "S",
@@ -230,7 +230,7 @@
       "referencia": "AU-T001",
       "nombre": "Tee Sicilia",
       "color": "Blanco Esencial",
-      "precio_usd": 29,
+      "precio_usd": 155,
       "categoria": "tshirt",
       "tallas": [
         "XS",
@@ -265,7 +265,7 @@
       "referencia": "AU-T002",
       "nombre": "Tee Sicilia",
       "color": "Negro Profundo",
-      "precio_usd": 29,
+      "precio_usd": 155,
       "categoria": "tshirt",
       "tallas": [
         "XS",
@@ -300,7 +300,7 @@
       "referencia": "AU-T003",
       "nombre": "Tee Capri",
       "color": "Arena Tostada",
-      "precio_usd": 29,
+      "precio_usd": 155,
       "categoria": "tshirt",
       "tallas": [
         "XS",
@@ -335,7 +335,7 @@
       "referencia": "AU-T004",
       "nombre": "Tee Capri",
       "color": "Verde Salvia",
-      "precio_usd": 29,
+      "precio_usd": 155,
       "categoria": "tshirt",
       "tallas": [
         "XS",
@@ -370,7 +370,7 @@
       "referencia": "AU-T005",
       "nombre": "Tee Amalfi",
       "color": "Azul Francés",
-      "precio_usd": 29,
+      "precio_usd": 155,
       "categoria": "tshirt",
       "tallas": [
         "XS",
@@ -405,7 +405,7 @@
       "referencia": "AU-T006",
       "nombre": "Tee Amalfi",
       "color": "Terracota",
-      "precio_usd": 29,
+      "precio_usd": 155,
       "categoria": "tshirt",
       "tallas": [
         "XS",
@@ -440,7 +440,7 @@
       "referencia": "AU-T007",
       "nombre": "Tee Napoli",
       "color": "Grafito",
-      "precio_usd": 29,
+      "precio_usd": 155,
       "categoria": "tshirt",
       "tallas": [
         "XS",
@@ -475,7 +475,7 @@
       "referencia": "AU-L001",
       "nombre": "Long Sleeve Torino",
       "color": "Azul Naval",
-      "precio_usd": 34,
+      "precio_usd": 245,
       "categoria": "longsleeve",
       "tallas": [
         "XS",
@@ -508,7 +508,7 @@
       "referencia": "AU-L002",
       "nombre": "Long Sleeve Torino",
       "color": "Crema Natural",
-      "precio_usd": 34,
+      "precio_usd": 245,
       "categoria": "longsleeve",
       "tallas": [
         "XS",
@@ -541,7 +541,7 @@
       "referencia": "AU-C001",
       "nombre": "Camisa Venezia",
       "color": "Oxford Blanco",
-      "precio_usd": 58,
+      "precio_usd": 340,
       "categoria": "camisa",
       "tallas": [
         "S",
@@ -572,7 +572,7 @@
       "referencia": "AU-C002",
       "nombre": "Camisa Génova",
       "color": "Azul Celeste",
-      "precio_usd": 58,
+      "precio_usd": 340,
       "categoria": "camisa",
       "tallas": [
         "S",
@@ -603,7 +603,7 @@
       "referencia": "AU-C003",
       "nombre": "Camisa Florentina",
       "color": "Lino Marfil",
-      "precio_usd": 58,
+      "precio_usd": 320,
       "categoria": "camisa",
       "tallas": [
         "S",
