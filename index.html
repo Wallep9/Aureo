@@ -1252,12 +1252,20 @@
 
   function makeSaleMiniCard(item) {
     const isLight = item.hex === '#F5F0E8' || item.hex === '#F0EDE6';
-    const textColor = isLight ? 'var(--text-dark)' : 'white';
     const saving = item.origUsd - item.saleUsd;
+    // Derivar nombre de imagen desde el ref: "AU-P001" → "au-p001.jpg"
+    const imgFile = item.ref.toLowerCase().replace('-','') + '.jpg';
+    // Intentar prenda primero, fallback a modelo
+    const prendaFile = item.ref.toLowerCase().replace('-','') + '-prenda.jpg';
+    const imgId = 'saleImg_' + item.id;
     return `
     <div class="sale-card" onclick="openSaleDetail(${item.id})">
-      <div style="position:relative;aspect-ratio:1/1;background:${item.hex};display:flex;align-items:center;justify-content:center">
-        <span style="font-family:Georgia,serif;font-size:56px;color:${isLight?'rgba(201,168,124,0.7)':'rgba(201,168,124,0.55)'};user-select:none">A</span>
+      <div style="position:relative;aspect-ratio:3/4;background:${item.hex};overflow:hidden;display:flex;align-items:center;justify-content:center">
+        <img id="${imgId}" src="rh-assets/${imgFile}"
+             alt="${item.name}" loading="lazy"
+             style="width:100%;height:100%;object-fit:cover;object-position:top center;display:block"
+             onerror="this.onerror=null;this.src='rh-assets/${prendaFile}';this.onerror=()=>{this.style.display='none';this.nextElementSibling.style.display='block'}">
+        <span style="display:none;font-family:Georgia,serif;font-size:56px;color:${isLight?'rgba(201,168,124,0.7)':'rgba(201,168,124,0.55)'};user-select:none;position:absolute">A</span>
         <span class="badge-pct">-${item.pct}%</span>
         ${item.best ? '<span class="badge-best">🇮🇹 Best</span>' : ''}
         <span class="badge-stock">${currentLang==='en'?item.stockLabelEn:item.stockLabel}</span>
