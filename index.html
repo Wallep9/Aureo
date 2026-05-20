@@ -386,7 +386,9 @@
     .product-card:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(28,26,26,.14)}
     .product-card.hidden{display:none!important}
 
-    .card-img-wrap{position:relative;aspect-ratio:1/1;overflow:hidden;display:flex;align-items:center;justify-content:center}
+    .card-img-wrap{position:relative;aspect-ratio:1/1;overflow:hidden;display:flex;align-items:center;justify-content:center;padding:0}
+    .card-img-wrap img{width:100%;height:100%;object-fit:cover;transition:transform .3s ease;display:block}
+    .product-card:hover .card-img-wrap img{transform:scale(1.04)}
     .card-img-wrap.light-bg{outline:1px solid rgba(0,0,0,.08);outline-offset:-1px}
 
     .cat-badge{position:absolute;top:.75rem;left:.75rem;font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.25rem .6rem;border-radius:4px;color:white}
@@ -668,41 +670,30 @@
     detailImgCol.style.background = getProductGradient(p.hex);
     const imgSlug = cardEl.dataset.img || '';          // ej: "au-p001.jpg"
     const imgSlugBase = imgSlug.replace(/\.jpg$/i,''); // ej: "au-p001"
-    const modeloUrl = imgSlug ? `rh-assets/${imgSlug}` : '';
     const prendaUrl = imgSlug ? `rh-assets/${imgSlugBase}-prenda.jpg` : '';
-    let showingPrenda = true;   // abre con prenda, click alterna a modelo
+    const modeloUrl = imgSlug ? `rh-assets/${imgSlug}` : '';
     const letter = detailImgCol.querySelector('#detailImgLetter');
 
-    function setDetailImg(url, fallbackUrl) {
-      let img = detailImgCol.querySelector('#detailImg');
-      if (!img) {
-        img = document.createElement('img');
-        img.id = 'detailImg';
-        img.style.cssText = 'width:100%;height:100%;object-fit:contain;cursor:zoom-in;display:block;padding:8px';
-        detailImgCol.appendChild(img);
-      }
-      img.onerror = fallbackUrl ? () => { img.src = fallbackUrl; img.onerror = null; } : () => { img.style.display='none'; letter.style.display=''; };
-      img.src = url;
-      letter.style.display = 'none';
-      img.style.display = 'block';
+    // Obtener o crear el <img> del modal
+    let detailImgEl = document.getElementById('detailImg');
+    if (!detailImgEl) {
+      detailImgEl = document.createElement('img');
+      detailImgEl.id = 'detailImg';
+      detailImgEl.style.cssText = 'max-width:100%;max-height:320px;object-fit:contain;display:block;pointer-events:none';
+      detailImgCol.appendChild(detailImgEl);
     }
 
     if (prendaUrl) {
-      setDetailImg(prendaUrl, modeloUrl);  // abre con prenda, fallback al modelo
+      // Muestra prenda; si falla, cae al modelo
+      detailImgEl.onerror = () => { detailImgEl.src = modeloUrl; detailImgEl.onerror = null; };
+      detailImgEl.src = prendaUrl;
+      letter.style.display = 'none';
+      detailImgEl.style.display = 'block';
+      // Click en la columna → zoom lightbox (igual que Royal H)
       detailImgCol.style.cursor = 'zoom-in';
-      detailImgCol.onclick = () => {
-        showingPrenda = !showingPrenda;
-        setDetailImg(showingPrenda ? prendaUrl : modeloUrl,
-                     showingPrenda ? modeloUrl : null);
-        detailImgCol.title = showingPrenda ? 'Click para ver el modelo' : 'Click para ver la prenda';
-      };
-      detailImgCol.title = 'Click para ver el modelo';
-    } else if (modeloUrl) {
-      setDetailImg(modeloUrl, null);
-      detailImgCol.onclick = null;
+      detailImgCol.onclick = () => openZoom(detailImgEl.src);
     } else {
-      let img = detailImgCol.querySelector('#detailImg');
-      if (img) { img.style.display = 'none'; }
+      detailImgEl.style.display = 'none';
       letter.style.display = '';
       detailImgCol.onclick = null;
     }
