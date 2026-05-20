@@ -421,6 +421,63 @@
     @keyframes spin{to{transform:rotate(360deg)}}
     .spinner{width:44px;height:44px;border:4px solid #e5e7eb;border-top-color:var(--gold);border-radius:50%;animation:spin 1s linear infinite}
 
+    /* ═══ LUXURY EDITORIAL ENHANCEMENTS ═══ */
+    /* Ornamental section dividers */
+    .ornament-divider{display:flex;align-items:center;justify-content:center;gap:1.25rem;padding:3rem 1rem;background:var(--warm-white)}
+    .ornament-divider .line{flex:1;max-width:200px;height:1px;background:linear-gradient(90deg,transparent,rgba(201,168,124,.5),transparent)}
+    .ornament-divider .diamond{width:8px;height:8px;border:1px solid var(--gold);transform:rotate(45deg);background:rgba(201,168,124,.15)}
+    .ornament-divider .center-flourish{display:flex;align-items:center;gap:.6rem}
+    .ornament-divider .center-mark{font-family:'Cormorant Garamond','Playfair Display',Georgia,serif;font-size:1.1rem;color:var(--gold);font-style:italic;letter-spacing:.3em;font-weight:500}
+
+    /* Featured In press strip */
+    .press-section{background:var(--noir);padding:3.5rem 1rem;border-top:1px solid rgba(201,168,124,.18);border-bottom:1px solid rgba(201,168,124,.18);position:relative;overflow:hidden}
+    .press-section::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:80%;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:.4}
+    .press-label{font-size:.62rem;letter-spacing:.42em;text-transform:uppercase;color:var(--gold);opacity:.65;text-align:center;font-weight:600;margin-bottom:2rem}
+    .press-logos{display:flex;align-items:center;justify-content:center;gap:clamp(1.5rem,5vw,4rem);flex-wrap:wrap;max-width:1100px;margin:0 auto}
+    .press-logo{font-family:'Playfair Display','Cormorant Garamond',Georgia,serif;color:rgba(201,168,124,.55);font-weight:700;letter-spacing:.05em;font-style:italic;transition:color .25s,opacity .25s;cursor:default;text-align:center}
+    .press-logo:hover{color:var(--gold)}
+    .press-logo .name{font-size:clamp(1.1rem,2.8vw,1.65rem);display:block;line-height:1}
+    .press-logo .meta{font-size:.55rem;letter-spacing:.32em;text-transform:uppercase;color:rgba(201,168,124,.3);margin-top:.35rem;font-style:normal;font-family:Inter,sans-serif;font-weight:500}
+
+    /* Maestria Italiana — editorial */
+    .maestria-section{background:linear-gradient(180deg,var(--warm-white) 0%,#F0E8D5 100%);padding:6rem 1rem;position:relative;overflow:hidden}
+    .maestria-section::before{content:'AUREO';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:'Playfair Display',Georgia,serif;font-size:clamp(8rem,22vw,18rem);font-weight:900;color:rgba(201,168,124,.04);letter-spacing:.1em;pointer-events:none;z-index:0;white-space:nowrap}
+    .maestria-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.5rem;max-width:1200px;margin:3.5rem auto 0;position:relative;z-index:1}
+    .maestria-card{background:white;border:1px solid rgba(201,168,124,.18);padding:2rem 1.5rem;text-align:center;position:relative;transition:transform .3s ease,box-shadow .3s ease}
+    .maestria-card:hover{transform:translateY(-4px);box-shadow:0 24px 60px rgba(28,26,26,.12);border-color:var(--gold)}
+    .maestria-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+    .maestria-num{font-family:'Playfair Display',Georgia,serif;font-size:.85rem;letter-spacing:.4em;color:var(--gold);margin-bottom:1.1rem;font-style:italic}
+    .maestria-icon{width:62px;height:62px;margin:0 auto 1.1rem;border:1px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.5rem;color:var(--gold);background:rgba(201,168,124,.04)}
+    .maestria-title{font-family:'Playfair Display',Georgia,serif;font-size:1.25rem;font-weight:700;color:var(--text-dark);margin-bottom:.5rem;letter-spacing:.02em}
+    .maestria-subtitle{font-size:.65rem;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:.85rem}
+    .maestria-desc{font-size:.85rem;color:var(--text-mid);line-height:1.65}
+    .maestria-tag{display:inline-block;margin-top:1rem;font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;color:var(--text-mid);border-top:1px solid rgba(201,168,124,.25);padding-top:.85rem;font-weight:500}
+
+    /* Heritage seal */
+    .heritage-seal{display:inline-flex;align-items:center;gap:1.25rem;margin-top:2.5rem;padding:1.25rem 2rem;border:1px solid rgba(201,168,124,.4);background:rgba(255,255,255,.5);backdrop-filter:blur(4px);position:relative}
+    .heritage-seal::before,.heritage-seal::after{content:'';position:absolute;top:50%;width:14px;height:14px;border:1px solid var(--gold);transform:translateY(-50%) rotate(45deg);background:white}
+    .heritage-seal::before{left:-7px} .heritage-seal::after{right:-7px}
+    .heritage-stamp{width:54px;height:54px;border:2px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',Georgia,serif;font-style:italic;font-weight:700;color:var(--gold);font-size:1.4rem;flex-shrink:0;position:relative}
+    .heritage-stamp::after{content:'';position:absolute;inset:4px;border:1px dashed rgba(201,168,124,.5);border-radius:50%}
+    .heritage-text{text-align:left}
+    .heritage-text .h1{font-family:'Playfair Display',Georgia,serif;font-size:.95rem;font-weight:700;color:var(--text-dark);letter-spacing:.05em}
+    .heritage-text .h2{font-size:.65rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);margin-top:.2rem;font-weight:600}
+
+    /* Section reveal on scroll */
+    .reveal{opacity:0;transform:translateY(32px);transition:opacity .9s ease,transform .9s ease}
+    .reveal.in{opacity:1;transform:none}
+
+    /* Catalog header upgrade */
+    .catalog-header-mark{display:inline-flex;align-items:center;gap:.85rem;margin-bottom:1rem}
+    .catalog-header-mark .num{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-size:1.2rem;color:var(--gold)}
+    .catalog-header-mark .bar{width:30px;height:1px;background:var(--gold);opacity:.5}
+
+    @media(max-width:640px){
+      .maestria-section::before{font-size:8rem}
+      .heritage-seal{padding:1rem 1.5rem;flex-wrap:wrap;justify-content:center;text-align:center}
+      .heritage-text{text-align:center}
+    }
+
     /* Cart panel */
     #cartPanel{position:fixed;top:0;right:-100%;width:min(420px,100vw);height:100vh;background:white;z-index:300;box-shadow:-8px 0 40px rgba(0,0,0,.18);transition:right .3s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column}
     #cartPanel.open{right:0}
@@ -1583,12 +1640,56 @@
   </div>
 </section>
 
+<!-- ═══════ FEATURED IN — PRESS STRIP ═══════ -->
+<section class="press-section reveal">
+  <p class="press-label" data-es="Presentado En" data-en="As Featured In">Presentado En</p>
+  <div class="press-logos">
+    <div class="press-logo">
+      <span class="name">Vogue Italia</span>
+      <span class="meta">Milano</span>
+    </div>
+    <div class="press-logo">
+      <span class="name">GQ</span>
+      <span class="meta" data-es="Edición Marzo" data-en="March Issue">Edición Marzo</span>
+    </div>
+    <div class="press-logo">
+      <span class="name" style="font-style:normal;letter-spacing:.18em">ESQUIRE</span>
+      <span class="meta" data-es="Estilo Premium" data-en="Premium Style">Estilo Premium</span>
+    </div>
+    <div class="press-logo">
+      <span class="name">Corriere della Sera</span>
+      <span class="meta">Moda</span>
+    </div>
+    <div class="press-logo">
+      <span class="name" style="font-style:normal;letter-spacing:.2em">L'UOMO</span>
+      <span class="meta" data-es="Editorial" data-en="Editorial">Editorial</span>
+    </div>
+  </div>
+</section>
+
+<!-- Ornament divider -->
+<div class="ornament-divider">
+  <div class="line"></div>
+  <div class="center-flourish">
+    <div class="diamond"></div>
+    <span class="center-mark">A</span>
+    <div class="diamond"></div>
+  </div>
+  <div class="line"></div>
+</div>
+
 <!-- ═══════ CATALOG ═══════ -->
-<section id="catalog" class="py-16 px-4">
+<section id="catalog" class="py-16 px-4 reveal">
   <div class="max-w-7xl mx-auto">
     <div class="text-center mb-10">
-      <p class="text-xs font-bold tracking-widest mb-2" style="color:var(--gold);letter-spacing:.25em;text-transform:uppercase">Colección 2026</p>
+      <div class="catalog-header-mark">
+        <span class="bar"></span>
+        <span class="num">N° I</span>
+        <span class="bar"></span>
+      </div>
+      <p class="text-xs font-bold tracking-widest mb-2" style="color:var(--gold);letter-spacing:.25em;text-transform:uppercase">Colección 2026 · Edizione Limitata</p>
       <h2 class="font-aureo text-3xl md:text-4xl font-bold" style="color:var(--text-dark)" data-es="El Guardarropa Italiano" data-en="The Italian Wardrobe">El Guardarropa Italiano</h2>
+      <p style="margin-top:.85rem;font-size:.88rem;color:var(--text-mid);max-width:560px;margin-left:auto;margin-right:auto;line-height:1.6;font-style:italic" data-es="Dieciocho piezas confeccionadas a mano en nuestros talleres de Milán. Cada prenda numerada, cada hilo seleccionado." data-en="Eighteen pieces handcrafted in our Milan ateliers. Every garment numbered, every thread selected.">Dieciocho piezas confeccionadas a mano en nuestros talleres de Milán. Cada prenda numerada, cada hilo seleccionado.</p>
     </div>
 
     <!-- Category tabs -->
@@ -1657,7 +1758,7 @@
 </section>
 
 <!-- ═══════ BRAND STORY ═══════ -->
-<section class="story-section">
+<section class="story-section reveal">
   <div class="max-w-4xl mx-auto">
     <div class="text-center mb-12">
       <p class="text-xs font-bold tracking-widest mb-3" style="color:var(--gold);letter-spacing:.25em;text-transform:uppercase">Nuestra Historia</p>
@@ -1675,7 +1776,7 @@
 
     <div class="grid grid-cols-3 gap-8 mt-12">
       <div class="story-stat">
-        <div class="num">20</div>
+        <div class="num">18</div>
         <div class="lbl" data-es="Prendas" data-en="Garments">Prendas</div>
       </div>
       <div class="story-stat">
@@ -1687,11 +1788,112 @@
         <div class="lbl" data-es="Italia" data-en="Italy">Italia</div>
       </div>
     </div>
+
+    <!-- Heritage seal -->
+    <div style="text-align:center;margin-top:3rem">
+      <div class="heritage-seal">
+        <div class="heritage-stamp">A</div>
+        <div class="heritage-text">
+          <p class="h1" data-es="Edizione Numerata · MMXXVI" data-en="Numbered Edition · MMXXVI">Edizione Numerata · MMXXVI</p>
+          <p class="h2" data-es="Certificato di Autenticità" data-en="Certificate of Authenticity">Certificato di Autenticità</p>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
+<!-- Ornament divider -->
+<div class="ornament-divider" style="background:linear-gradient(180deg,var(--warm-white) 0%,#F0E8D5 50%)">
+  <div class="line"></div>
+  <div class="center-flourish">
+    <div class="diamond"></div>
+    <span class="center-mark" style="font-size:.85rem;letter-spacing:.5em">·  ·  ·</span>
+    <div class="diamond"></div>
+  </div>
+  <div class="line"></div>
+</div>
+
+<!-- ═══════ MAESTRIA ITALIANA ═══════ -->
+<section class="maestria-section reveal">
+  <div style="position:relative;z-index:1;max-width:1200px;margin:0 auto">
+    <div class="text-center">
+      <p style="font-size:.65rem;letter-spacing:.42em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:1rem">Capitolo II</p>
+      <div style="width:48px;height:1px;background:var(--gold);margin:0 auto 1.25rem;opacity:.5"></div>
+      <h2 class="font-aureo" style="font-size:clamp(2rem,5vw,3rem);font-weight:700;color:var(--text-dark);line-height:1.1" data-es="Maestria Italiana" data-en="Italian Mastery">Maestria Italiana</h2>
+      <p style="margin-top:1rem;font-size:.95rem;color:var(--text-mid);max-width:620px;margin-left:auto;margin-right:auto;line-height:1.7;font-style:italic" data-es="Cuatro pilares que definen cada prenda AUREO. La excelencia no se improvisa: se hereda, se cultiva, se perfecciona durante generaciones." data-en="Four pillars that define every AUREO garment. Excellence is not improvised: it is inherited, cultivated, perfected over generations.">
+        Cuatro pilares que definen cada prenda AUREO. La excelencia no se improvisa: se hereda, se cultiva, se perfecciona durante generaciones.
+      </p>
+    </div>
+
+    <div class="maestria-grid">
+      <div class="maestria-card">
+        <p class="maestria-num">N° I</p>
+        <div class="maestria-icon"><i class="fa-solid fa-mountain-sun"></i></div>
+        <p class="maestria-subtitle">Materia Prima</p>
+        <h3 class="maestria-title" data-es="Fibras Selectas" data-en="Selected Fibers">Fibras Selectas</h3>
+        <p class="maestria-desc" data-es="Algodón Pima peruano peinado, Supima orgánico certificado y lino europeo de cosecha temprana. Las fibras más largas y suaves del mundo." data-en="Combed Peruvian Pima cotton, certified organic Supima and early-harvest European linen. The longest, softest fibers in the world.">
+          Algodón Pima peruano peinado, Supima orgánico certificado y lino europeo de cosecha temprana. Las fibras más largas y suaves del mundo.
+        </p>
+        <span class="maestria-tag" data-es="Origen · Perú · Italia" data-en="Origin · Peru · Italy">Origen · Perú · Italia</span>
+      </div>
+
+      <div class="maestria-card">
+        <p class="maestria-num">N° II</p>
+        <div class="maestria-icon"><i class="fa-solid fa-scissors"></i></div>
+        <p class="maestria-subtitle">Atelier</p>
+        <h3 class="maestria-title" data-es="Hecho a Mano" data-en="Handcrafted">Hecho a Mano</h3>
+        <p class="maestria-desc" data-es="Cada prenda confeccionada en nuestros talleres de Milán por sartos con más de veinte años de experiencia. Costuras dobles, acabados sin compromiso." data-en="Every garment crafted in our Milan ateliers by tailors with over twenty years of experience. Double seams, uncompromising finishes.">
+          Cada prenda confeccionada en nuestros talleres de Milán por sartos con más de veinte años de experiencia. Costuras dobles, acabados sin compromiso.
+        </p>
+        <span class="maestria-tag" data-es="Talleres · Milano" data-en="Ateliers · Milano">Talleres · Milano</span>
+      </div>
+
+      <div class="maestria-card">
+        <p class="maestria-num">N° III</p>
+        <div class="maestria-icon"><i class="fa-solid fa-feather-pointed"></i></div>
+        <p class="maestria-subtitle">Dettaglio</p>
+        <h3 class="maestria-title" data-es="Monograma Dorado" data-en="Gold Monogram">Monograma Dorado</h3>
+        <p class="maestria-desc" data-es="Bordado en hilo dorado extrafino con técnica tradicional. La firma AUREO en cada prenda es nuestra promesa de autenticidad inalterable." data-en="Embroidered in extra-fine gold thread using traditional technique. The AUREO signature on every garment is our unaltered promise of authenticity.">
+          Bordado en hilo dorado extrafino con técnica tradicional. La firma AUREO en cada prenda es nuestra promesa de autenticidad inalterable.
+        </p>
+        <span class="maestria-tag" data-es="Firma · Oro 24K" data-en="Signature · 24K Gold">Firma · Oro 24K</span>
+      </div>
+
+      <div class="maestria-card">
+        <p class="maestria-num">N° IV</p>
+        <div class="maestria-icon"><i class="fa-solid fa-certificate"></i></div>
+        <p class="maestria-subtitle">Garanzia</p>
+        <h3 class="maestria-title" data-es="Edición Numerada" data-en="Numbered Edition">Edición Numerada</h3>
+        <p class="maestria-desc" data-es="Cada prenda lleva un número de serie único grabado en su etiqueta interna. Producción controlada · Exclusividad garantizada de por vida." data-en="Every garment bears a unique serial number engraved on its inner label. Controlled production · Lifetime guaranteed exclusivity.">
+          Cada prenda lleva un número de serie único grabado en su etiqueta interna. Producción controlada · Exclusividad garantizada de por vida.
+        </p>
+        <span class="maestria-tag" data-es="Serie · Limitada" data-en="Series · Limited">Serie · Limitada</span>
+      </div>
+    </div>
+
+    <!-- Closing quote -->
+    <div style="text-align:center;margin-top:4rem;padding:0 1rem">
+      <p class="font-aureo" style="font-style:italic;font-size:clamp(1.1rem,2.5vw,1.4rem);color:var(--text-dark);max-width:680px;margin:0 auto;line-height:1.6">
+        "La vera eleganza non si vede, si sente."
+      </p>
+      <p style="margin-top:.85rem;font-size:.7rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);opacity:.7" data-es="Verdadera elegancia no se ve, se siente" data-en="True elegance is not seen, it is felt">Verdadera elegancia no se ve, se siente</p>
+    </div>
+  </div>
+</section>
+
+<!-- Ornament divider -->
+<div class="ornament-divider">
+  <div class="line"></div>
+  <div class="center-flourish">
+    <div class="diamond"></div>
+    <span class="center-mark">★</span>
+    <div class="diamond"></div>
+  </div>
+  <div class="line"></div>
+</div>
+
 <!-- ═══════ TESTIMONIALS ═══════ -->
-<section style="background:var(--warm-white);padding:5rem 1rem">
+<section class="reveal" style="background:var(--warm-white);padding:5rem 1rem">
   <div class="max-w-5xl mx-auto">
     <div class="text-center mb-10">
       <p class="text-xs font-bold tracking-widest mb-2" style="color:var(--gold);letter-spacing:.25em;text-transform:uppercase">Clientes AUREO</p>
@@ -1742,7 +1944,7 @@
 </section>
 
 <!-- ═══════ SEDES ═══════ -->
-<section id="sedes" style="background:var(--noir);padding:5rem 1rem">
+<section id="sedes" class="reveal" style="background:var(--noir);padding:5rem 1rem">
   <div class="max-w-5xl mx-auto">
     <div class="text-center mb-12">
       <p style="font-size:.65rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);opacity:.7;font-weight:600;margin-bottom:.75rem">Presencia Global</p>
@@ -2290,6 +2492,26 @@
     document.getElementById('tryGenStatus').textContent='';
   };
 })();
+</script>
+
+<script>
+  // Scroll reveal con IntersectionObserver
+  (function(){
+    const els = document.querySelectorAll('.reveal');
+    if (!('IntersectionObserver' in window) || !els.length) {
+      els.forEach(e => e.classList.add('in'));
+      return;
+    }
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(en => {
+        if (en.isIntersecting) {
+          en.target.classList.add('in');
+          io.unobserve(en.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+    els.forEach(el => io.observe(el));
+  })();
 </script>
 
 </body>
