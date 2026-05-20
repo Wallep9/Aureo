@@ -451,6 +451,31 @@
     #waBtn{position:fixed;bottom:1.5rem;right:1.5rem;z-index:800;display:flex;align-items:center;gap:.55rem;background:var(--gold);color:var(--noir);font-size:.82rem;font-weight:700;padding:.7rem 1.15rem .7rem .85rem;border-radius:2rem;box-shadow:0 4px 18px rgba(201,168,124,.5);text-decoration:none;transition:transform .2s,box-shadow .2s}
     #waBtn:hover{transform:translateY(-3px);box-shadow:0 8px 28px rgba(201,168,124,.65)}
     #waBtn svg{width:1.4rem;height:1.4rem;flex-shrink:0}
+
+    /* ── SALDI / SALE section ── */
+    .sale-section{background:linear-gradient(135deg,#1a0f05 0%,#2d1a00 40%,#1C1A1A 100%);position:relative;overflow:hidden}
+    .sale-section::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 50%,rgba(201,168,124,.12) 0%,transparent 60%),radial-gradient(ellipse at 80% 20%,rgba(201,168,124,.07) 0%,transparent 50%);pointer-events:none}
+    .sale-card{background:white;border-radius:1rem;overflow:hidden;cursor:pointer;transition:transform .2s,box-shadow .2s}
+    .sale-card:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(0,0,0,.22)}
+    .badge-pct{position:absolute;top:.5rem;right:.5rem;background:#8B0000;color:white;font-size:.65rem;font-weight:800;padding:.22rem .55rem;border-radius:4px;letter-spacing:.05em;z-index:2}
+    .badge-best{position:absolute;top:.5rem;left:.5rem;background:var(--gold);color:var(--noir);font-size:.6rem;font-weight:800;padding:.22rem .55rem;border-radius:4px;letter-spacing:.03em;z-index:2}
+    .badge-stock{position:absolute;bottom:.5rem;left:.5rem;background:#8B6914;color:white;font-size:.6rem;font-weight:700;padding:.22rem .55rem;border-radius:4px;letter-spacing:.03em;z-index:2}
+    .price-orig{text-decoration:line-through;color:#9ca3af;font-size:.78rem;font-weight:400}
+    .price-sale-num{color:#8B0000;font-weight:800;font-size:.95rem}
+    /* SALE countdown */
+    .sale-countdown-box{display:inline-flex;gap:.4rem;align-items:center;background:rgba(0,0,0,.45);padding:.5rem .8rem;border-radius:.6rem;backdrop-filter:blur(8px)}
+    .sale-cd-unit{display:flex;flex-direction:column;align-items:center}
+    .sale-cd-num{font-family:'Playfair Display',serif;font-weight:800;font-size:1.4rem;color:white;background:rgba(255,255,255,.12);padding:.15rem .5rem;border-radius:.35rem;min-width:2.4rem;text-align:center;display:inline-block}
+    .sale-cd-sep{color:rgba(255,255,255,.5);font-weight:700;align-self:flex-start;margin-top:.15rem}
+    .sale-cd-lbl{font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.55);margin-top:.15rem;text-align:center}
+    .sale-stock-bar{height:5px;background:rgba(255,255,255,.15);border-radius:99px;overflow:hidden;margin-top:.4rem}
+    .sale-stock-bar-fill{height:100%;background:linear-gradient(90deg,var(--gold),#E8D5B0);border-radius:99px;transition:width .8s ease}
+    /* Sale detail modal */
+    #saleDetailModal{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:600;display:none;align-items:center;justify-content:center;padding:1rem;backdrop-filter:blur(5px)}
+    #saleDetailModal.open{display:flex}
+    #saleDetailBox{background:white;border-radius:1.5rem;max-width:540px;width:100%;overflow:hidden;position:relative;box-shadow:0 30px 80px rgba(0,0,0,.5)}
+    #saleDetailClose{position:absolute;top:.75rem;right:.75rem;background:rgba(0,0,0,.06);border:none;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:1.3rem;color:#555;z-index:2;display:flex;align-items:center;justify-content:center}
+    #saleDetailClose:hover{background:rgba(0,0,0,.12)}
   </style>
 
   <script>
@@ -598,6 +623,8 @@
       const colorEl = card.querySelector('.card-color-label');
       if (colorEl) colorEl.textContent = lang === 'en' ? (COLOR_EN[colorSp] || colorSp) : colorSp;
     });
+    // Re-render sale grid with new language
+    if (typeof renderSaleGrid === 'function') renderSaleGrid();
   }
 
   function setCurr(curr) {
@@ -937,6 +964,7 @@
       document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
           if (document.getElementById('imgZoom').classList.contains('open')) { closeZoom(); return; }
+          if (document.getElementById('saleDetailModal').classList.contains('open')) { closeSaleDetail(); return; }
           if (document.getElementById('detailModal').classList.contains('open')) { closeDetail(); return; }
           closeCart();
         }
@@ -1080,7 +1108,242 @@
     }
 
     initNewsletterPopup();
+    initSaleSection();
   });
+
+  /* ══════════════════════════════════════════════════════════════
+     SALDI — Sale Data & Logic
+  ══════════════════════════════════════════════════════════════ */
+  const SALE_DATA = [
+    {
+      id: 1,
+      ref: 'AU-P001',
+      name: 'Polo Venezia',
+      nameEn: 'Polo Venezia',
+      cat: 'Polo',
+      hex: '#1B3A6B',
+      origUsd: 42,
+      saleUsd: 32,
+      pct: 30,
+      sizes: ['S','M','L'],
+      best: true,
+      stockPct: 35,
+      desc: 'Polo piqué en algodón Pima peruano peinado y mercerizado. Tacto sedoso, lustre natural superior. Azul naval clásico intemporal.',
+      descEn: 'Piqué polo in combed Peruvian Pima cotton, mercerized. Silky touch, superior natural luster. Classic timeless navy.',
+      stockLabel: 'Últimas unidades',
+      stockLabelEn: 'Last units'
+    },
+    {
+      id: 7,
+      ref: 'AU-T001',
+      name: 'Tee Sicilia',
+      nameEn: 'Tee Sicilia',
+      cat: 'T-Shirt',
+      hex: '#F5F0E8',
+      origUsd: 29,
+      saleUsd: 19,
+      pct: 34,
+      sizes: ['M','L','XL'],
+      best: false,
+      stockPct: 55,
+      desc: 'El esencial blanco perfecto. Algodón Supima orgánico peinado — la fibra más larga y suave. Tratamiento anti-amarillamiento.',
+      descEn: 'The perfect essential white. Combed organic Supima cotton — the longest and softest fiber. Anti-yellowing treatment.',
+      stockLabel: 'Stock limitado',
+      stockLabelEn: 'Limited stock'
+    },
+    {
+      id: 14,
+      ref: 'AU-L001',
+      name: 'Long Sleeve Torino',
+      nameEn: 'Long Sleeve Torino',
+      cat: 'Manga Larga',
+      hex: '#3D2B1F',
+      origUsd: 34,
+      saleUsd: 25,
+      pct: 26,
+      sizes: ['S','M'],
+      best: false,
+      stockPct: 20,
+      desc: 'Manga larga en algodón Supima peinado, corte raglan para máxima libertad de movimiento. Monograma en pecho y mini \'A\' en puño.',
+      descEn: "Long sleeve in combed Supima cotton, raglan cut for maximum freedom of movement. Monogram on chest and mini 'A' on cuff.",
+      stockLabel: '¡Quedan pocas!',
+      stockLabelEn: 'Almost gone!'
+    },
+    {
+      id: 18,
+      ref: 'AU-C001',
+      name: 'Camisa Venezia',
+      nameEn: 'Camisa Venezia',
+      cat: 'Camisa',
+      hex: '#F0EDE6',
+      origUsd: 58,
+      saleUsd: 42,
+      pct: 28,
+      sizes: ['M','L'],
+      best: true,
+      stockPct: 40,
+      desc: 'Camisa Oxford en algodón egipcio Giza 45, la fibra más fina del mundo. Textura Oxford 2×2 da riqueza visual. Impecable para entorno formal.',
+      descEn: 'Oxford shirt in Egyptian Giza 45 cotton, the finest fiber in the world. Oxford 2×2 texture gives visual richness. Impeccable for formal settings.',
+      stockLabel: 'Oferta especial',
+      stockLabelEn: 'Special offer'
+    }
+  ];
+
+  // Countdown to 2026-06-05 00:00:00 local
+  const SALE_END = new Date('2026-06-05T00:00:00');
+
+  function tickSaleCountdown() {
+    const now = new Date();
+    const diff = SALE_END - now;
+    if (diff <= 0) {
+      ['saleCD_d','saleCD_h','saleCD_m','saleCD_s'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = '00';
+      });
+      return;
+    }
+    const d = Math.floor(diff / 86400000);
+    const h = Math.floor((diff % 86400000) / 3600000);
+    const m = Math.floor((diff % 3600000) / 60000);
+    const s = Math.floor((diff % 60000) / 1000);
+    const fmt = v => String(v).padStart(2,'0');
+    const setEl = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = fmt(val); };
+    setEl('saleCD_d', d);
+    setEl('saleCD_h', h);
+    setEl('saleCD_m', m);
+    setEl('saleCD_s', s);
+  }
+
+  let saleDetailSelectedSize = null;
+  let saleDetailCurrentItem  = null;
+
+  function makeSaleMiniCard(item) {
+    const isLight = item.hex === '#F5F0E8' || item.hex === '#F0EDE6';
+    const textColor = isLight ? 'var(--text-dark)' : 'white';
+    const saving = item.origUsd - item.saleUsd;
+    return `
+    <div class="sale-card" onclick="openSaleDetail(${item.id})">
+      <div style="position:relative;aspect-ratio:1/1;background:${item.hex};display:flex;align-items:center;justify-content:center">
+        <span style="font-family:Georgia,serif;font-size:56px;color:${isLight?'rgba(201,168,124,0.7)':'rgba(201,168,124,0.55)'};user-select:none">A</span>
+        <span class="badge-pct">-${item.pct}%</span>
+        ${item.best ? '<span class="badge-best">🇮🇹 Best</span>' : ''}
+        <span class="badge-stock">${currentLang==='en'?item.stockLabelEn:item.stockLabel}</span>
+      </div>
+      <div style="padding:.85rem">
+        <p style="font-size:.6rem;font-weight:700;letter-spacing:.15em;color:var(--gold);text-transform:uppercase;margin-bottom:.2rem">${item.ref}</p>
+        <p style="font-size:.88rem;font-weight:700;color:var(--text-dark);font-family:'Playfair Display',Georgia,serif">${currentLang==='en'?item.nameEn:item.name}</p>
+        <p style="font-size:.7rem;color:var(--text-mid);margin:.2rem 0 .6rem">${item.cat}</p>
+        <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin-bottom:.55rem">
+          <span class="price-orig">${formatPrice(item.origUsd, currentLang)}</span>
+          <span class="price-sale-num">${formatPrice(item.saleUsd, currentLang)}</span>
+        </div>
+        <div style="margin-bottom:.55rem">
+          <div class="sale-stock-bar"><div class="sale-stock-bar-fill" style="width:${item.stockPct}%"></div></div>
+          <p style="font-size:.6rem;color:rgba(201,168,124,.6);margin-top:.25rem;text-align:right">${currentLang==='en'?item.stockLabelEn:item.stockLabel}</p>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:.3rem;margin-bottom:.6rem">
+          ${item.sizes.map(s=>`<span style="font-size:.65rem;font-weight:600;border:1px solid #e5e7eb;border-radius:3px;padding:.1rem .35rem;color:#555">${s}</span>`).join('')}
+        </div>
+        <button onclick="event.stopPropagation();openSaleDetail(${item.id})"
+          style="width:100%;background:var(--noir);color:var(--gold);border:1px solid rgba(201,168,124,.3);border-radius:.6rem;padding:.55rem;font-size:.78rem;font-weight:700;cursor:pointer;letter-spacing:.04em;transition:all .2s;font-family:inherit"
+          onmouseover="this.style.background='#8B0000';this.style.color='white';this.style.borderColor='#8B0000'"
+          onmouseout="this.style.background='var(--noir)';this.style.color='var(--gold)';this.style.borderColor='rgba(201,168,124,.3)'">
+          <i class="fa-solid fa-tag"></i> ${currentLang==='en'?'Buy at SALDI price':'Comprar al precio SALDI'}
+        </button>
+      </div>
+    </div>`;
+  }
+
+  function renderSaleGrid() {
+    const grid = document.getElementById('saleGrid');
+    if (!grid) return;
+    grid.innerHTML = SALE_DATA.map(makeSaleMiniCard).join('');
+  }
+
+  function openSaleDetail(itemId) {
+    const item = SALE_DATA.find(i => i.id === itemId);
+    if (!item) return;
+    saleDetailCurrentItem = item;
+    saleDetailSelectedSize = null;
+
+    // Image col
+    const imgCol = document.getElementById('saleDetailImgCol');
+    if (imgCol) imgCol.style.background = item.hex;
+    const letter = document.getElementById('saleDetailLetter');
+    const isLight = item.hex === '#F5F0E8' || item.hex === '#F0EDE6';
+    if (letter) letter.style.color = isLight ? 'rgba(201,168,124,0.7)' : 'rgba(201,168,124,0.55)';
+
+    const badgeEl = document.getElementById('saleDetailBadgePct');
+    if (badgeEl) badgeEl.textContent = `-${item.pct}%`;
+
+    document.getElementById('saleDetailRef').textContent = item.ref;
+    document.getElementById('saleDetailName').textContent = currentLang==='en' ? item.nameEn : item.name;
+    document.getElementById('saleDetailDesc').textContent = currentLang==='en' ? item.descEn : item.desc;
+
+    document.getElementById('saleDetailOrig').innerHTML = formatPrice(item.origUsd, currentLang);
+    document.getElementById('saleDetailPrice').innerHTML = formatPrice(item.saleUsd, currentLang);
+    const saving = item.origUsd - item.saleUsd;
+    document.getElementById('saleDetailSaving').textContent =
+      currentLang==='en' ? `Save $${saving}` : `Ahorras $${saving}`;
+
+    // Sizes
+    const sizesEl = document.getElementById('saleDetailSizes');
+    sizesEl.innerHTML = item.sizes.map(s =>
+      `<button onclick="selectSaleDetailSize('${s}',this)"
+        style="padding:.3rem .75rem;border-radius:.4rem;border:1.5px solid #e5e7eb;background:#fff;font-size:.8rem;font-weight:600;color:#374151;cursor:pointer;transition:all .15s">${s}</button>`
+    ).join('');
+
+    // Cart button
+    document.getElementById('saleDetailAddCart').onclick = () => {
+      if (!saleDetailSelectedSize) {
+        showToast(currentLang==='en' ? '⚠ Choose a size' : '⚠ Elige una talla');
+        return;
+      }
+      const existing = cart.find(c => c.id === item.id && c.size === saleDetailSelectedSize);
+      if (existing) { existing.qty++; }
+      else {
+        cart.push({
+          id: item.id,
+          name: currentLang==='en' ? item.nameEn : item.name,
+          color: item.cat,
+          price: item.saleUsd,
+          hex: item.hex,
+          qty: 1,
+          size: saleDetailSelectedSize
+        });
+      }
+      saveCart();
+      updateCartBadge();
+      showToast('✓ ' + (currentLang==='en' ? item.nameEn : item.name) + ' (' + saleDetailSelectedSize + ') ' + (currentLang==='en'?'added':'agregado'));
+      closeSaleDetail();
+    };
+
+    document.getElementById('saleDetailModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function selectSaleDetailSize(size, btn) {
+    saleDetailSelectedSize = size;
+    document.querySelectorAll('#saleDetailSizes button').forEach(b => {
+      b.style.background = '#fff';
+      b.style.borderColor = '#e5e7eb';
+      b.style.color = '#374151';
+    });
+    btn.style.background = 'var(--gold)';
+    btn.style.borderColor = 'var(--gold)';
+    btn.style.color = 'var(--noir)';
+  }
+
+  function closeSaleDetail() {
+    document.getElementById('saleDetailModal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function initSaleSection() {
+    renderSaleGrid();
+    tickSaleCountdown();
+    setInterval(tickSaleCountdown, 1000);
+  }
   </script>
 </head>
 <body>
@@ -1100,6 +1363,7 @@
       <button onclick="filterProducts('tshirt');document.getElementById('catalog').scrollIntoView({behavior:'smooth'})" class="text-sm font-medium transition" style="color:rgba(201,168,124,.7);background:none;border:none;cursor:pointer" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='rgba(201,168,124,.7)'">T-Shirts</button>
       <button onclick="filterProducts('longsleeve');document.getElementById('catalog').scrollIntoView({behavior:'smooth'})" class="text-sm font-medium transition" style="color:rgba(201,168,124,.7);background:none;border:none;cursor:pointer" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='rgba(201,168,124,.7)'">Manga Larga</button>
       <button onclick="filterProducts('camisa');document.getElementById('catalog').scrollIntoView({behavior:'smooth'})" class="text-sm font-medium transition" style="color:rgba(201,168,124,.7);background:none;border:none;cursor:pointer" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='rgba(201,168,124,.7)'">Camisas</button>
+      <button onclick="document.getElementById('saldi').scrollIntoView({behavior:'smooth'})" class="text-sm font-medium transition" style="color:white;background:#8B0000;border:none;cursor:pointer;padding:.25rem .7rem;border-radius:3px;font-weight:700;letter-spacing:.06em" onmouseover="this.style.background='#6B0000'" onmouseout="this.style.background='#8B0000'" data-es="🇮🇹 Saldi" data-en="🇮🇹 Saldi">🇮🇹 Saldi</button>
     </div>
 
     <!-- Right controls -->
@@ -1188,6 +1452,18 @@
       </button>
     </div>
 
+    <!-- SALDI badge -->
+    <div class="hero-ctas" style="margin-top:.75rem">
+      <button onclick="document.getElementById('saldi').scrollIntoView({behavior:'smooth'})"
+        style="display:inline-flex;align-items:center;gap:.5rem;background:rgba(139,0,0,.75);border:1px solid rgba(201,168,124,.4);color:white;font-size:.7rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;padding:.6rem 1.3rem;border-radius:2px;cursor:pointer;backdrop-filter:blur(4px);transition:all .25s"
+        onmouseover="this.style.background='rgba(139,0,0,.95)';this.style.borderColor='var(--gold)'"
+        onmouseout="this.style.background='rgba(139,0,0,.75)';this.style.borderColor='rgba(201,168,124,.4)'">
+        <span style="font-size:.9rem">🇮🇹</span>
+        <span data-es="Saldi — Hasta 34% OFF" data-en="Saldi — Up to 34% OFF">Saldi — Hasta 34% OFF</span>
+        <span style="background:var(--gold);color:var(--noir);font-size:.6rem;font-weight:800;padding:.15rem .4rem;border-radius:3px;margin-left:.2rem" data-es="VER OFERTAS" data-en="SEE DEALS">VER OFERTAS</span>
+      </button>
+    </div>
+
   </div>
 
   <!-- Scroll indicator -->
@@ -1254,6 +1530,53 @@
         <div style="width:40px;height:40px;border:3px solid var(--gold-light);border-top-color:var(--gold);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto"></div>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- ═══════ SALDI — OFFERTE SPECIALI ═══════ -->
+<section id="saldi" class="sale-section py-16 px-4">
+  <div class="max-w-7xl mx-auto" style="position:relative;z-index:1">
+
+    <!-- Header -->
+    <div class="text-center mb-10">
+      <p style="font-size:.65rem;font-weight:800;letter-spacing:.35em;text-transform:uppercase;color:var(--gold);margin-bottom:.6rem">🇮🇹 Offerta Limitata</p>
+      <h2 class="font-aureo" style="font-size:clamp(2rem,5vw,3rem);font-weight:800;color:white;line-height:1.1" data-es="Saldi — Prendas Seleccionadas" data-en="Saldi — Selected Garments">Saldi — Prendas Seleccionadas</h2>
+      <p style="margin-top:.6rem;font-size:.88rem;color:rgba(201,168,124,.65);letter-spacing:.04em" data-es="Alta moda italiana · Precios de temporada · Solo hasta agotar stock" data-en="Italian high fashion · Seasonal prices · While stocks last">Alta moda italiana · Precios de temporada · Solo hasta agotar stock</p>
+
+      <!-- Countdown timer -->
+      <div style="margin-top:1.5rem;display:flex;flex-direction:column;align-items:center;gap:.5rem">
+        <p style="font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(201,168,124,.5)" data-es="La oferta termina en" data-en="Offer ends in">La oferta termina en</p>
+        <div class="sale-countdown-box">
+          <div class="sale-cd-unit">
+            <span id="saleCD_d" class="sale-cd-num">--</span>
+            <span class="sale-cd-lbl" data-es="días" data-en="days">días</span>
+          </div>
+          <span class="sale-cd-sep">:</span>
+          <div class="sale-cd-unit">
+            <span id="saleCD_h" class="sale-cd-num">--</span>
+            <span class="sale-cd-lbl" data-es="horas" data-en="hours">horas</span>
+          </div>
+          <span class="sale-cd-sep">:</span>
+          <div class="sale-cd-unit">
+            <span id="saleCD_m" class="sale-cd-num">--</span>
+            <span class="sale-cd-lbl" data-es="min" data-en="min">min</span>
+          </div>
+          <span class="sale-cd-sep">:</span>
+          <div class="sale-cd-unit">
+            <span id="saleCD_s" class="sale-cd-num">--</span>
+            <span class="sale-cd-lbl" data-es="seg" data-en="sec">seg</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sale grid (rendered by JS) -->
+    <div id="saleGrid" class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4 md:gap-6"></div>
+
+    <!-- Footer note -->
+    <p style="text-align:center;margin-top:2.5rem;font-size:.72rem;color:rgba(201,168,124,.35);letter-spacing:.08em" data-es="* Descuentos sobre precio USD regular · Válido hasta agotar existencias · No acumulable con otras promociones" data-en="* Discounts on regular USD price · Valid while stocks last · Not combinable with other promotions">
+      * Descuentos sobre precio USD regular · Válido hasta agotar existencias · No acumulable con otras promociones
+    </p>
   </div>
 </section>
 
@@ -1513,6 +1836,46 @@
     </div>
   </div>
 </footer>
+
+<!-- ═══════ SALE DETAIL MODAL ═══════ -->
+<div id="saleDetailModal" onclick="if(event.target===this)closeSaleDetail()">
+  <div id="saleDetailBox">
+    <button id="saleDetailClose" onclick="closeSaleDetail()">×</button>
+    <!-- Image / color band -->
+    <div id="saleDetailImgCol" style="aspect-ratio:16/7;display:flex;align-items:center;justify-content:center;position:relative;background:var(--noir)">
+      <span id="saleDetailLetter" style="font-family:Georgia,serif;font-size:96px;color:rgba(201,168,124,.6);user-select:none">A</span>
+      <div id="saleDetailBadgePct" style="position:absolute;top:.75rem;right:.75rem;background:#8B0000;color:white;font-size:.8rem;font-weight:800;padding:.3rem .7rem;border-radius:4px;letter-spacing:.05em"></div>
+    </div>
+    <!-- Info -->
+    <div style="padding:1.5rem;display:flex;flex-direction:column;gap:.85rem">
+      <div>
+        <p id="saleDetailRef" style="font-size:.65rem;font-weight:700;letter-spacing:.18em;color:var(--gold);text-transform:uppercase"></p>
+        <h3 id="saleDetailName" class="font-aureo" style="font-size:1.35rem;font-weight:700;color:var(--text-dark);margin-top:.15rem"></h3>
+      </div>
+      <div style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap">
+        <span id="saleDetailOrig" class="price-orig"></span>
+        <span id="saleDetailPrice" class="price-sale-num" style="font-size:1.4rem"></span>
+        <span id="saleDetailSaving" style="background:#8B0000;color:white;font-size:.7rem;font-weight:800;padding:.2rem .5rem;border-radius:4px"></span>
+      </div>
+      <p id="saleDetailDesc" style="font-size:.84rem;color:var(--text-mid);line-height:1.6"></p>
+      <!-- Tallas -->
+      <div>
+        <p style="font-size:.7rem;font-weight:700;letter-spacing:.12em;color:#9ca3af;text-transform:uppercase;margin-bottom:.45rem" data-es="Tallas disponibles" data-en="Available sizes">Tallas disponibles</p>
+        <div id="saleDetailSizes" style="display:flex;flex-wrap:wrap;gap:.4rem"></div>
+      </div>
+      <!-- CTA -->
+      <div style="display:flex;flex-direction:column;gap:.6rem;margin-top:.25rem">
+        <button id="saleDetailAddCart"
+          style="background:var(--gold);color:var(--noir);border:none;border-radius:.75rem;padding:.85rem;font-weight:700;font-size:.9rem;cursor:pointer;transition:opacity .2s;font-family:inherit"
+          onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+          <i class="fa-solid fa-cart-plus"></i>
+          <span data-es=" Agregar al carrito — precio SALDI" data-en=" Add to cart — SALDI price"> Agregar al carrito — precio SALDI</span>
+        </button>
+        <p style="font-size:.7rem;color:rgba(201,168,124,.5);text-align:center;letter-spacing:.05em" data-es="🇮🇹 Offerta esclusiva · Solo prendas seleccionadas" data-en="🇮🇹 Exclusive offer · Selected garments only">🇮🇹 Offerta esclusiva · Solo prendas seleccionadas</p>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- ═══════ CART PANEL ═══════ -->
 <div id="cartOverlay" onclick="closeCart()"></div>
