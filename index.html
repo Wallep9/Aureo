@@ -404,6 +404,22 @@
 
     .btn-cart{display:flex;align-items:center;justify-content:center;gap:.5rem;background:var(--gold);color:var(--noir);padding:.75rem 1rem;border-radius:.75rem;font-size:.85rem;font-weight:700;cursor:pointer;border:none;width:100%;transition:opacity .15s;font-family:inherit}
     .btn-cart:hover{opacity:.88}
+    .btn-try-on{display:flex;align-items:center;justify-content:center;gap:.5rem;background:var(--noir);color:var(--gold);padding:.75rem 1rem;border-radius:.75rem;font-size:.85rem;font-weight:700;cursor:pointer;border:1px solid rgba(201,168,124,.3);width:100%;transition:opacity .15s;font-family:inherit}
+    .btn-try-on:hover{opacity:.88}
+
+    /* Try-on panel */
+    #tryPanel{position:fixed;top:0;right:-100%;width:min(520px,100vw);height:100vh;background:white;z-index:301;box-shadow:-8px 0 40px rgba(0,0,0,.18);transition:right .3s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;overflow:hidden}
+    #tryPanel.open{right:0}
+    #panelOverlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:300;opacity:0;pointer-events:none;transition:opacity .3s}
+    #panelOverlay.open{opacity:1;pointer-events:all}
+    .panel-header{background:var(--noir);color:white;padding:1.25rem 1.5rem;flex-shrink:0}
+    .panel-body{flex:1;overflow-y:auto;padding:1.5rem;display:flex;flex-direction:column;gap:1.25rem}
+    .preview-img{width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:1rem;display:block}
+    .result-box{min-height:280px;border:1.5px dashed #d1d5db;border-radius:1.25rem;background:#fafafa;display:flex;align-items:center;justify-content:center;text-align:center}
+    .btn-panel{display:flex;align-items:center;justify-content:center;gap:.5rem;background:var(--noir);color:white;padding:.75rem 1rem;border-radius:.75rem;font-size:.85rem;font-weight:600;cursor:pointer;border:none;width:100%;transition:background .15s;font-family:inherit}
+    .btn-panel:hover{opacity:.88}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .spinner{width:44px;height:44px;border:4px solid #e5e7eb;border-top-color:var(--gold);border-radius:50%;animation:spin 1s linear infinite}
 
     /* Cart panel */
     #cartPanel{position:fixed;top:0;right:-100%;width:min(420px,100vw);height:100vh;background:white;z-index:300;box-shadow:-8px 0 40px rgba(0,0,0,.18);transition:right .3s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column}
@@ -1082,10 +1098,16 @@
           </div>
           <p class="text-base font-bold mt-auto" style="color:var(--text-dark)" data-usd="${p.precio_usd}">${formatPrice(p.precio_usd, currentLang)}</p>
           <div class="flex flex-wrap gap-1">${sizesHtml}</div>
-          <button class="btn-cart" onmousedown="event.stopPropagation()" onclick="event.stopPropagation();addToCart(${p.id})">
-            <i class="fa-solid fa-cart-plus"></i>
-            <span data-es="Agregar al carrito" data-en="Add to cart">Agregar al carrito</span>
-          </button>
+          <div class="flex gap-2">
+            <button class="btn-cart" style="flex:1" onmousedown="event.stopPropagation()" onclick="event.stopPropagation();addToCart(${p.id})">
+              <i class="fa-solid fa-cart-plus"></i>
+              <span data-es="Agregar" data-en="Add">Agregar</span>
+            </button>
+            <button class="btn-try-on" style="flex:1" onmousedown="event.stopPropagation()" onclick="event.stopPropagation();openPanel(${p.id})">
+              <i class="fa-solid fa-shirt"></i>
+              <span data-es="Probar IA" data-en="Try-On">Probar IA</span>
+            </button>
+          </div>
         </div>
       </article>`;
     }).join('');
@@ -1428,6 +1450,10 @@
         <button id="btnUsd" class="curr-btn active" onclick="setCurr('usd')">USD</button>
         <button id="btnCop" class="curr-btn" onclick="setCurr('cop')">COP</button>
       </div>
+      <!-- Try-on -->
+      <button onclick="openPanel(null)" class="flex items-center gap-2 text-sm font-semibold px-3 py-2 rounded-lg transition flex-shrink-0" style="background:rgba(201,168,124,.12);border:1px solid rgba(201,168,124,.3);color:var(--gold);cursor:pointer">
+        <i class="fa-solid fa-shirt"></i> <span>Probador IA</span>
+      </button>
       <!-- Cart -->
       <button class="cart-badge-wrap relative p-2 rounded-full" onclick="openCart()" style="background:rgba(201,168,124,.12);border:none;cursor:pointer;color:var(--gold)">
         <i class="fa-solid fa-bag-shopping text-lg"></i>
@@ -2031,9 +2057,240 @@
   <span>WhatsApp</span>
 </a>
 
-<style>
-  @keyframes spin{to{transform:rotate(360deg)}}
-</style>
+<!-- ═══════ PROBADOR VIRTUAL IA ═══════ -->
+<div id="panelOverlay" onclick="closePanel()"></div>
+<aside id="tryPanel">
+  <div class="panel-header">
+    <div class="flex items-center justify-between">
+      <div>
+        <p style="font-family:'Playfair Display',Georgia,serif;font-size:1.1rem;font-weight:700;color:white">Probador Virtual IA</p>
+        <p style="font-size:.72rem;margin-top:.2rem;color:rgba(255,255,255,.5)">IDM-VTON · Replicate</p>
+      </div>
+      <button onclick="closePanel()" style="width:2.25rem;height:2.25rem;border-radius:.5rem;background:rgba(255,255,255,.12);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center">
+        <i class="fa-solid fa-xmark" style="color:white"></i>
+      </button>
+    </div>
+    <div id="panelGarmentBar" class="mt-3 rounded-xl p-3 hidden flex items-center gap-3" style="background:rgba(255,255,255,.12)">
+      <img id="panelGarmentThumb" src="" alt="" style="width:3rem;height:3rem;border-radius:.5rem;object-fit:contain;background:rgba(255,255,255,.2)">
+      <div style="min-width:0">
+        <p id="panelGarmentName" style="font-weight:600;font-size:.85rem;color:white;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></p>
+        <p id="panelGarmentColor" style="font-size:.72rem;color:rgba(255,255,255,.55)"></p>
+      </div>
+    </div>
+  </div>
+  <div class="panel-body">
+    <!-- Paso 1 -->
+    <section>
+      <div class="flex items-center gap-2 mb-3">
+        <span style="width:1.5rem;height:1.5rem;border-radius:50%;background:var(--gold);color:var(--noir);font-size:.72rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">1</span>
+        <h3 style="font-weight:600;font-size:.875rem;color:#374151">Tu foto</h3>
+        <span id="photoOkBadge" class="hidden" style="font-size:.72rem;font-weight:700;padding:.15rem .5rem;border-radius:999px;margin-left:auto;background:#dcfce7;color:#15803d">✓ Lista</span>
+      </div>
+      <video id="tryWebcam" class="hidden" autoplay playsinline muted style="width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:1rem;display:block"></video>
+      <img id="tryPhotoPreview" class="hidden" alt="Tu foto" style="width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:1rem;display:block"/>
+      <div id="tryPhotoPlaceholder" class="result-box flex-col gap-3" style="height:8rem">
+        <i class="fa-solid fa-user" style="font-size:1.875rem;color:#d1d5db"></i>
+        <p style="font-size:.875rem;color:#9ca3af">Sube o captura tu foto</p>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:.75rem">
+        <button onclick="tryStartWebcam()" class="btn-panel"><i class="fa-solid fa-video"></i> Cámara</button>
+        <button onclick="tryCapturePhoto()" class="btn-panel" style="background:#374151"><i class="fa-solid fa-camera"></i> Capturar</button>
+      </div>
+      <input id="tryUploadInput" type="file" accept="image/*" style="margin-top:.5rem;display:block;width:100%;font-size:.75rem;color:#6b7280;cursor:pointer"/>
+      <div style="margin-top:.75rem;border-radius:.75rem;padding:.75rem;font-size:.75rem;background:#eff6ff;color:#1d4ed8">
+        <p style="font-weight:600;margin-bottom:.25rem">Mejores resultados:</p>
+        <p>• Foto de cuerpo completo, fondo claro, postura recta</p>
+        <p>• Ropa ajustada sin capas gruesas encima</p>
+      </div>
+    </section>
+    <!-- Paso 2 -->
+    <section>
+      <div class="flex items-center gap-2 mb-3">
+        <span style="width:1.5rem;height:1.5rem;border-radius:50%;background:#e5e7eb;color:#4b5563;font-size:.72rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">2</span>
+        <h3 style="font-weight:600;font-size:.875rem;color:#374151">Prenda personalizada</h3>
+        <span style="font-size:.72rem;color:#9ca3af;margin-left:auto">opcional</span>
+      </div>
+      <label style="display:block;width:100%;border:2px dashed #d1d5db;border-radius:.75rem;padding:1rem;text-align:center;cursor:pointer">
+        <i class="fa-solid fa-shirt" style="font-size:1.5rem;color:#d1d5db;display:block;margin-bottom:.25rem"></i>
+        <p style="font-size:.75rem;color:#6b7280;font-weight:500">Sube imagen de tu prenda</p>
+        <p style="font-size:.72rem;color:#9ca3af">PNG/JPG · fondo blanco ideal</p>
+        <input id="tryGarmentUpload" type="file" accept="image/*" style="display:none" onchange="tryHandleCustomGarment(event)"/>
+      </label>
+      <div id="tryCustomGarmentPreview" class="hidden" style="margin-top:.5rem">
+        <img id="tryCustomGarmentImg" style="width:5rem;height:5rem;object-fit:contain;border-radius:.5rem;border:1px solid #e5e7eb;display:block;margin:0 auto .5rem" alt="Prenda"/>
+        <select id="tryCustomGarmentType" style="width:100%;border:1px solid #d1d5db;border-radius:.5rem;padding:.4rem .5rem;font-size:.875rem">
+          <option value="upper_body">Parte superior (polo, camisa, chaqueta…)</option>
+          <option value="lower_body">Parte inferior (pantalón, falda…)</option>
+          <option value="dresses">Vestido</option>
+        </select>
+      </div>
+    </section>
+    <!-- Paso 3 -->
+    <section>
+      <div class="flex items-center gap-2 mb-3">
+        <span style="width:1.5rem;height:1.5rem;border-radius:50%;background:var(--gold);color:var(--noir);font-size:.72rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">3</span>
+        <h3 style="font-weight:600;font-size:.875rem;color:#374151">Resultado</h3>
+        <span id="tryGenStatus" style="font-size:.72rem;color:#9ca3af;margin-left:auto"></span>
+      </div>
+      <div id="tryResultBox" class="result-box p-6">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:.75rem">
+          <i class="fa-regular fa-image" style="font-size:2.5rem;color:#d1d5db"></i>
+          <p style="font-size:.875rem;color:#9ca3af">El resultado aparecerá aquí</p>
+        </div>
+      </div>
+      <button id="tryGenerateBtn" onclick="tryRunTryOn()" class="btn-panel" style="margin-top:1rem;padding:1rem;font-size:.875rem;letter-spacing:.05em;text-transform:uppercase;background:var(--gold);color:var(--noir)">
+        <i class="fa-solid fa-wand-magic-sparkles"></i> Generar prueba virtual
+      </button>
+      <p style="font-size:.72rem;color:#9ca3af;text-align:center;margin-top:.5rem">~30–90 seg · ~$0.02 USD por imagen</p>
+    </section>
+  </div>
+</aside>
+
+<script>
+(function(){
+  let tryStream=null, tryCapturedBlob=null, tryCustomGarmentBlob=null, trySelectedProduct=null, tryIsGenerating=false;
+
+  window.openPanel = function(productId) {
+    trySelectedProduct = productId ? PRODUCTS.find(p => p.id === parseInt(productId)) : null;
+    const bar = document.getElementById('panelGarmentBar');
+    if (trySelectedProduct) {
+      document.getElementById('panelGarmentThumb').src = 'rh-assets/' + trySelectedProduct.imagen;
+      document.getElementById('panelGarmentName').textContent = trySelectedProduct.nombre;
+      document.getElementById('panelGarmentColor').textContent = trySelectedProduct.color;
+      bar.classList.remove('hidden');
+    } else { bar.classList.add('hidden'); }
+    document.getElementById('tryPanel').classList.add('open');
+    document.getElementById('panelOverlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  };
+
+  window.closePanel = function() {
+    document.getElementById('tryPanel').classList.remove('open');
+    document.getElementById('panelOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+  };
+
+  window.tryStartWebcam = async function() {
+    try {
+      if (tryStream) tryStream.getTracks().forEach(t => t.stop());
+      tryStream = await navigator.mediaDevices.getUserMedia({ video:{facingMode:'user',width:{ideal:768},height:{ideal:1024}},audio:false });
+      const vid = document.getElementById('tryWebcam');
+      vid.srcObject = tryStream;
+      vid.classList.remove('hidden');
+      document.getElementById('tryPhotoPlaceholder').classList.add('hidden');
+      document.getElementById('tryPhotoPreview').classList.add('hidden');
+    } catch { showToast('❌ Sin acceso a cámara — sube una foto'); }
+  };
+
+  window.tryCapturePhoto = async function() {
+    const vid = document.getElementById('tryWebcam');
+    if (!vid.srcObject) { showToast('⚠️ Enciende la cámara primero'); return; }
+    const w=vid.videoWidth||768, h=vid.videoHeight||1024;
+    const c=document.createElement('canvas'); c.width=w; c.height=h;
+    c.getContext('2d').drawImage(vid,0,0,w,h);
+    c.toBlob(blob => {
+      setTryPhoto(new File([blob],'persona.jpg',{type:'image/jpeg'}));
+      tryStream.getTracks().forEach(t=>t.stop()); tryStream=null;
+      vid.classList.add('hidden');
+    },'image/jpeg',0.92);
+  };
+
+  function setTryPhoto(file) {
+    tryCapturedBlob = file;
+    const url = URL.createObjectURL(file);
+    const prev = document.getElementById('tryPhotoPreview');
+    prev.src = url; prev.classList.remove('hidden');
+    document.getElementById('tryPhotoPlaceholder').classList.add('hidden');
+    document.getElementById('tryWebcam').classList.add('hidden');
+    document.getElementById('photoOkBadge').classList.remove('hidden');
+  }
+  document.getElementById('tryUploadInput').addEventListener('change', e => { const f=e.target.files?.[0]; if(f) setTryPhoto(f); });
+
+  window.tryHandleCustomGarment = function(e) {
+    const f = e.target.files?.[0]; if (!f) return;
+    tryCustomGarmentBlob = f;
+    const url = URL.createObjectURL(f);
+    document.getElementById('tryCustomGarmentImg').src = url;
+    document.getElementById('tryCustomGarmentPreview').classList.remove('hidden');
+  };
+
+  async function blobToB64(blob, maxPx=768) {
+    return new Promise((res,rej) => {
+      const url=URL.createObjectURL(blob);
+      const img=new Image();
+      img.onload=()=>{ let w=img.naturalWidth,h=img.naturalHeight,r=Math.min(maxPx/w,maxPx/h,1); w=Math.round(w*r); h=Math.round(h*r);
+        const c=document.createElement('canvas'); c.width=w; c.height=h;
+        c.getContext('2d').drawImage(img,0,0,w,h); URL.revokeObjectURL(url); res(c.toDataURL('image/jpeg',0.85)); };
+      img.onerror=()=>{ URL.revokeObjectURL(url); rej(new Error('No se pudo leer la imagen')); };
+      img.src=url;
+    });
+  }
+
+  window.tryRunTryOn = async function() {
+    if (tryIsGenerating) return;
+    const garmentSource = trySelectedProduct ? 'product' : (tryCustomGarmentBlob ? 'custom' : null);
+    if (!garmentSource) { showToast('⚠️ Selecciona una prenda del catálogo'); return; }
+    if (!tryCapturedBlob) { showToast('⚠️ Captura o sube tu foto primero'); return; }
+
+    tryIsGenerating=true;
+    document.getElementById('tryGenerateBtn').disabled=true;
+    const t0=Date.now();
+
+    const tick=msg=>{ const s=Math.round((Date.now()-t0)/1000);
+      document.getElementById('tryGenStatus').textContent=`${s}s`;
+      document.getElementById('tryResultBox').innerHTML=`<div style="display:flex;flex-direction:column;align-items:center;gap:1rem;padding:2rem;width:100%"><div class="spinner"></div><p style="font-size:.875rem;font-weight:600;color:#374151">${msg}</p><p style="font-size:.72rem;color:#9ca3af">${s}s · 30–90s aprox.</p></div>`;
+    };
+
+    try {
+      tick('Comprimiendo imagen…');
+      const humanB64 = await blobToB64(tryCapturedBlob, 768);
+      let garmentInput, garmentType, garmentDesc;
+      if (garmentSource==='product') {
+        garmentInput = 'rh-assets/' + trySelectedProduct.imagen;
+        garmentType  = 'upper_body';
+        garmentDesc  = trySelectedProduct.nombre + ' ' + trySelectedProduct.color + ', Italian fashion garment, front view';
+      } else {
+        tick('Comprimiendo prenda…');
+        garmentInput = await blobToB64(tryCustomGarmentBlob, 768);
+        garmentType  = document.getElementById('tryCustomGarmentType').value;
+        garmentDesc  = 'custom garment, front view';
+      }
+      tick('Enviando a Replicate…');
+      const predRes = await fetch('/replicate/predictions', {
+        method:'POST',
+        headers:{ Authorization:`Token `, 'Content-Type':'application/json', 'Prefer':'wait=55' },
+        body: JSON.stringify({ input:{ human_img:humanB64, garm_img:garmentInput, garment_des:garmentDesc,
+          category:garmentType, is_checked:true, is_checked_crop:false, denoise_steps:30,
+          seed:Math.floor(Math.random()*9999) } })
+      });
+      if (!predRes.ok) { let m=`HTTP ${predRes.status}`; try{const d=await predRes.json();m=d.detail||d.error||m;}catch{} throw new Error(m); }
+      let pred = await predRes.json();
+      tick(`Generando… (${pred.status})`);
+      for (let i=0; i<50 && !['succeeded','failed','canceled'].includes(pred.status); i++) {
+        await new Promise(r=>setTimeout(r,3000));
+        const chk = await fetch(`/replicate/predictions/${pred.id}`, { headers:{ Authorization:`Token ` } });
+        if (!chk.ok) throw new Error(`HTTP ${chk.status}`);
+        pred = await chk.json();
+        tick(`Generando… (${pred.status})`);
+      }
+      if (pred.status!=='succeeded') throw new Error(pred.error||`Falló: "${pred.status}"`);
+      const out = Array.isArray(pred.output)?pred.output[0]:pred.output;
+      if (!out) throw new Error('Sin imagen de salida');
+      const elapsed=Math.round((Date.now()-t0)/1000);
+      document.getElementById('tryGenStatus').textContent=`✅ ${elapsed}s`;
+      document.getElementById('tryResultBox').innerHTML=`<div style="width:100%"><img src="${out}" alt="Resultado" style="width:100%;border-radius:1rem;object-fit:contain;max-height:420px;box-shadow:0 4px 20px rgba(0,0,0,.12)"><div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:.75rem"><a href="${out}" download="aureo.jpg" target="_blank" class="btn-panel" style="text-decoration:none;font-size:.85rem;padding:.75rem"><i class="fa-solid fa-download"></i> Descargar</a><button onclick="tryResetResult()" class="btn-panel" style="background:#374151;font-size:.85rem;padding:.75rem"><i class="fa-solid fa-rotate-right"></i> Otra prenda</button></div></div>`;
+    } catch(err) {
+      document.getElementById('tryGenStatus').textContent='Error';
+      document.getElementById('tryResultBox').innerHTML=`<div style="text-align:center;padding:1.5rem"><i class="fa-solid fa-circle-exclamation" style="font-size:2rem;color:#dc2626"></i><p style="font-weight:600;font-size:.875rem;color:#dc2626;margin-top:.5rem">Error al generar</p><p style="font-size:.75rem;color:#6b7280;margin-top:.25rem">${err.message}</p><button onclick="tryResetResult()" class="btn-panel" style="background:#374151;width:auto;padding:.5rem 1rem;margin-top:.75rem;font-size:.85rem">Reintentar</button></div>`;
+    } finally { tryIsGenerating=false; document.getElementById('tryGenerateBtn').disabled=false; }
+  };
+
+  window.tryResetResult = function() {
+    document.getElementById('tryResultBox').innerHTML=`<div style="display:flex;flex-direction:column;align-items:center;gap:.75rem"><i class="fa-regular fa-image" style="font-size:2.5rem;color:#d1d5db"></i><p style="font-size:.875rem;color:#9ca3af">El resultado aparecerá aquí</p></div>`;
+    document.getElementById('tryGenStatus').textContent='';
+  };
+})();
+</script>
 
 </body>
 </html>
