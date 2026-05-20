@@ -1481,7 +1481,7 @@
 
 <!-- ═══════ NAV ═══════ -->
 <nav class="au-nav sticky top-0 z-100" style="z-index:100">
-  <div class="max-w-7xl mx-auto px-4 flex items-center justify-between h-16 gap-4">
+  <div class="max-w-7xl mx-auto px-2 sm:px-4 flex items-center justify-between h-16 gap-1 sm:gap-4">
     <!-- Logo -->
     <a href="#" class="flex items-center gap-2.5 flex-shrink-0 no-underline">
       <img src="logoaureo.jpg" style="height:36px;width:auto;border-radius:4px" alt="AUREO logo">
@@ -1510,8 +1510,8 @@
         <button id="btnCop" class="curr-btn" onclick="setCurr('cop')">COP</button>
       </div>
       <!-- Try-on -->
-      <button onclick="openPanel(null)" class="flex items-center gap-2 text-sm font-semibold px-3 py-2 rounded-lg transition flex-shrink-0" style="background:rgba(201,168,124,.12);border:1px solid rgba(201,168,124,.3);color:var(--gold);cursor:pointer">
-        <i class="fa-solid fa-shirt"></i> <span>Probador IA</span>
+      <button onclick="openPanel(null)" class="flex items-center gap-1 sm:gap-2 text-sm font-semibold px-2 sm:px-3 py-2 rounded-lg transition flex-shrink-0" style="background:rgba(201,168,124,.12);border:1px solid rgba(201,168,124,.3);color:var(--gold);cursor:pointer">
+        <i class="fa-solid fa-shirt"></i> <span class="hidden sm:inline">Probador IA</span>
       </button>
       <!-- Cart -->
       <button class="cart-badge-wrap relative p-2 rounded-full" onclick="openCart()" style="background:rgba(201,168,124,.12);border:none;cursor:pointer;color:var(--gold)">
@@ -2497,20 +2497,6 @@
 </script>
 
 <script>
-  // Bloquear scroll horizontal en iOS Safari
-  (function(){
-    var startX = 0, startY = 0;
-    document.addEventListener('touchstart', function(e){
-      startX = e.touches[0].clientX;
-      startY = e.touches[0].clientY;
-    }, { passive: true });
-    document.addEventListener('touchmove', function(e){
-      var dx = Math.abs(e.touches[0].clientX - startX);
-      var dy = Math.abs(e.touches[0].clientY - startY);
-      if (dx > dy) e.preventDefault();
-    }, { passive: false });
-  })();
-
   // Scroll reveal con IntersectionObserver
   (function(){
     const els = document.querySelectorAll('.reveal');
