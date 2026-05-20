@@ -1254,9 +1254,9 @@
     const isLight = item.hex === '#F5F0E8' || item.hex === '#F0EDE6';
     const saving = item.origUsd - item.saleUsd;
     // Derivar nombre de imagen desde el ref: "AU-P001" → "au-p001.jpg"
-    const imgFile = item.ref.toLowerCase().replace('-','') + '.jpg';
+    const imgFile = item.ref.toLowerCase() + '.jpg';
     // Intentar prenda primero, fallback a modelo
-    const prendaFile = item.ref.toLowerCase().replace('-','') + '-prenda.jpg';
+    const prendaFile = item.ref.toLowerCase() + '-prenda.jpg';
     const imgId = 'saleImg_' + item.id;
     return `
     <div class="sale-card" onclick="openSaleDetail(${item.id})">
