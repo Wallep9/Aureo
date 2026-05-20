@@ -668,36 +668,38 @@
     detailImgCol.style.background = getProductGradient(p.hex);
     const imgSlug = cardEl.dataset.img || '';          // ej: "au-p001.jpg"
     const imgSlugBase = imgSlug.replace(/\.jpg$/i,''); // ej: "au-p001"
-    const modeloUrl = imgSlug  ? `rh-assets/${imgSlug}` : '';
-    const prendaUrl = imgSlug  ? `rh-assets/${imgSlugBase}-prenda.jpg` : '';
-    let showingModelo = true;
+    const modeloUrl = imgSlug ? `rh-assets/${imgSlug}` : '';
+    const prendaUrl = imgSlug ? `rh-assets/${imgSlugBase}-prenda.jpg` : '';
+    let showingPrenda = true;   // abre con prenda, click alterna a modelo
     const letter = detailImgCol.querySelector('#detailImgLetter');
 
     function setDetailImg(url, fallbackUrl) {
-      // Elimina img anterior si existe
       let img = detailImgCol.querySelector('#detailImg');
       if (!img) {
         img = document.createElement('img');
         img.id = 'detailImg';
-        img.style.cssText = 'width:100%;height:100%;object-fit:cover;cursor:zoom-in;display:block;border-radius:inherit';
+        img.style.cssText = 'width:100%;height:100%;object-fit:contain;cursor:zoom-in;display:block;padding:8px';
         detailImgCol.appendChild(img);
       }
-      img.onerror = fallbackUrl ? () => { img.src = fallbackUrl; img.onerror = null; } : null;
+      img.onerror = fallbackUrl ? () => { img.src = fallbackUrl; img.onerror = null; } : () => { img.style.display='none'; letter.style.display=''; };
       img.src = url;
       letter.style.display = 'none';
       img.style.display = 'block';
     }
 
-    if (modeloUrl) {
-      setDetailImg(modeloUrl, null);
+    if (prendaUrl) {
+      setDetailImg(prendaUrl, modeloUrl);  // abre con prenda, fallback al modelo
       detailImgCol.style.cursor = 'zoom-in';
       detailImgCol.onclick = () => {
-        showingModelo = !showingModelo;
-        setDetailImg(showingModelo ? modeloUrl : prendaUrl,
-                     showingModelo ? null : modeloUrl);
-        detailImgCol.title = showingModelo ? 'Click para ver la prenda' : 'Click para ver el modelo';
+        showingPrenda = !showingPrenda;
+        setDetailImg(showingPrenda ? prendaUrl : modeloUrl,
+                     showingPrenda ? modeloUrl : null);
+        detailImgCol.title = showingPrenda ? 'Click para ver el modelo' : 'Click para ver la prenda';
       };
-      detailImgCol.title = 'Click para ver la prenda';
+      detailImgCol.title = 'Click para ver el modelo';
+    } else if (modeloUrl) {
+      setDetailImg(modeloUrl, null);
+      detailImgCol.onclick = null;
     } else {
       let img = detailImgCol.querySelector('#detailImg');
       if (img) { img.style.display = 'none'; }
@@ -1071,7 +1073,12 @@
         onclick="if(!event.target.closest('button')&&!event.target.closest('.tag-size'))openDetail(this)">
         <div class="card-img-wrap${isLight?' light-bg':''}" style="background:${gradient}">
           <span class="cat-badge ${p.categoria}" data-es="${catLabel}">${catLabel}</span>
-          <div style="font-family:Georgia,serif;font-size:52px;color:#C9A87C;text-shadow:0 2px 8px rgba(0,0,0,0.3);user-select:none;opacity:0.9">A</div>
+          <img src="rh-assets/${p.imagen}"
+               alt="${p.nombre}"
+               loading="lazy"
+               style="width:100%;height:100%;object-fit:cover;display:block"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+          <div style="display:none;font-family:Georgia,serif;font-size:52px;color:#C9A87C;text-shadow:0 2px 8px rgba(0,0,0,0.3);user-select:none;opacity:0.9">A</div>
         </div>
         <div class="flex flex-col gap-2 p-4 flex-1">
           <div>
