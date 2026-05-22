@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <title>AUREO — Alta Moda Italiana · Colección 2026</title>
   <meta name="description" content="Alta moda italiana. Polos, T-Shirts, Manga Larga y Camisas en Algodón Pima, Supima Orgánico y Lino Europeo. Confeccionado en Milán.">
   <meta name="keywords" content="moda italiana, polos, camisas, algodón pima, supima, lino europeo, aureo, milano">
@@ -2498,6 +2498,43 @@
 </script>
 
 <script>
+  // ═══ LOCK HORIZONTAL SCROLL — DEFINITIVE iOS FIX ═══
+  (function(){
+    var wrap = document.getElementById('pageWrap');
+    if (!wrap) return;
+    var sx = 0, sy = 0, locked = false;
+
+    // 1) Touch interception
+    wrap.addEventListener('touchstart', function(e){
+      sx = e.touches[0].pageX;
+      sy = e.touches[0].pageY;
+      locked = false;
+    }, { passive: true });
+
+    wrap.addEventListener('touchmove', function(e){
+      var dx = e.touches[0].pageX - sx;
+      var dy = e.touches[0].pageY - sy;
+      // Si decide moverse mas en horizontal que vertical -> bloquear
+      if (!locked && Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 5) {
+        locked = true;
+      }
+      if (locked) {
+        e.preventDefault();
+      }
+    }, { passive: false });
+
+    // 2) Reset cualquier scrollLeft accidental
+    function resetH(){
+      if (wrap.scrollLeft !== 0) wrap.scrollLeft = 0;
+      if (window.scrollX !== 0) window.scrollTo(0, window.scrollY);
+      if (document.documentElement.scrollLeft !== 0) document.documentElement.scrollLeft = 0;
+      if (document.body.scrollLeft !== 0) document.body.scrollLeft = 0;
+    }
+    wrap.addEventListener('scroll', resetH, { passive: true });
+    window.addEventListener('scroll', resetH, { passive: true });
+    setInterval(resetH, 200);
+  })();
+
   // Scroll reveal con IntersectionObserver
   (function(){
     const els = document.querySelectorAll('.reveal');
