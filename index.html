@@ -34,9 +34,8 @@
       --text-mid: #6B5E52;
     }
     *{box-sizing:border-box;margin:0;padding:0}
-    html{overflow-x:clip;overscroll-behavior-x:none;width:100%}
-    body{overflow-x:clip;width:100%;max-width:100vw;overscroll-behavior-x:none;position:relative}
-    #pageWrap{overflow-x:clip;width:100%;max-width:100vw;position:relative}
+    html,body{position:fixed;inset:0;width:100%;height:100%;overflow:hidden;overscroll-behavior:none}
+    #pageWrap{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:none}
     body{font-family:'Inter',sans-serif;background:var(--warm-white);color:var(--text-dark)}
     .font-aureo{font-family:'Playfair Display',Georgia,serif}
     ::-webkit-scrollbar{width:6px} ::-webkit-scrollbar-track{background:#f1f1f1} ::-webkit-scrollbar-thumb{background:var(--gold);border-radius:99px}
@@ -828,7 +827,7 @@
     };
 
     document.getElementById('detailModal').classList.add('open');
-    document.body.style.overflow = 'hidden';
+    document.getElementById('pageWrap').style.overflow = 'hidden';
   }
 
   function selectDetailSize(size, btn) {
@@ -845,7 +844,7 @@
 
   function closeDetail() {
     document.getElementById('detailModal').classList.remove('open');
-    document.body.style.overflow = '';
+    document.getElementById('pageWrap').style.overflow = '';
   }
 
   /* ══════════════════════════════════════════════════════════════
@@ -859,13 +858,13 @@
     renderCart();
     document.getElementById('cartPanel').classList.add('open');
     document.getElementById('cartOverlay').classList.add('open');
-    document.body.style.overflow = 'hidden';
+    document.getElementById('pageWrap').style.overflow = 'hidden';
   }
 
   function closeCart() {
     document.getElementById('cartPanel').classList.remove('open');
     document.getElementById('cartOverlay').classList.remove('open');
-    document.body.style.overflow = '';
+    document.getElementById('pageWrap').style.overflow = '';
   }
 
   function addToCart(productId) {
@@ -997,12 +996,12 @@
       zoomImg.src = src;
       zoomImg.style.transform = 'scale(1)';
       document.getElementById('imgZoom').classList.add('open');
-      document.body.style.overflow = 'hidden';
+      document.getElementById('pageWrap').style.overflow = 'hidden';
     };
 
     window.closeZoom = function() {
       document.getElementById('imgZoom').classList.remove('open');
-      document.body.style.overflow = '';
+      document.getElementById('pageWrap').style.overflow = '';
       zoomScale = 1;
     };
 
@@ -1451,7 +1450,7 @@
     };
 
     document.getElementById('saleDetailModal').classList.add('open');
-    document.body.style.overflow = 'hidden';
+    document.getElementById('pageWrap').style.overflow = 'hidden';
   }
 
   function selectSaleDetailSize(size, btn) {
@@ -1468,7 +1467,7 @@
 
   function closeSaleDetail() {
     document.getElementById('saleDetailModal').classList.remove('open');
-    document.body.style.overflow = '';
+    document.getElementById('pageWrap').style.overflow = '';
   }
 
   function initSaleSection() {
@@ -2367,13 +2366,13 @@
     } else { bar.classList.add('hidden'); }
     document.getElementById('tryPanel').classList.add('open');
     document.getElementById('panelOverlay').classList.add('open');
-    document.body.style.overflow = 'hidden';
+    document.getElementById('pageWrap').style.overflow = 'hidden';
   };
 
   window.closePanel = function() {
     document.getElementById('tryPanel').classList.remove('open');
     document.getElementById('panelOverlay').classList.remove('open');
-    document.body.style.overflow = '';
+    document.getElementById('pageWrap').style.overflow = '';
   };
 
   window.tryStartWebcam = async function() {
